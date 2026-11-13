@@ -50,6 +50,7 @@ filterwarnings = [
     "ignore::DeprecationWarning:evidently.*",
     "ignore::DeprecationWarning:litestar.*",
     "ignore::DeprecationWarning:numpy.*",
+    "ignore:Using `httpx` with `starlette.testclient` is deprecated",
 ]
 
 [dependency-groups]
