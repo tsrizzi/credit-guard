@@ -1,0 +1,20 @@
+stages:
+  prepare:
+    cmd: python -m credit_guard.data.prepare
+    deps:
+      - data/raw/application_train.csv
+      - src/credit_guard/data
+      - src/credit_guard/contracts
+    params:
+      - seed
+      - prepare
+      - contract
+    outs:
+      - data/reference
+      - data/holdout
+      - data/protected
+      - data/quarantine
+      - reports/validation/reference_raw.json:
+          cache: false
+      - reports/validation/reference_raw.html:
+          cache: false

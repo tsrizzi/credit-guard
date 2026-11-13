@@ -1,0 +1,166 @@
+{
+  "batch": "reference_raw",
+  "generated_at": "2026-11-13T23:29:22.134241+00:00",
+  "passed": false,
+  "verdict": "BLOQUEADO",
+  "n_rows": 307511,
+  "n_invalid_rows": 23,
+  "violations_by_check": {
+    "required_not_null": 14,
+    "income_positive_max": 5,
+    "domain_CODE_GENDER": 4,
+    "domain_NAME_FAMILY_STATUS": 2
+  },
+  "failure_cases": [
+    {
+      "column": "AMT_INCOME_TOTAL",
+      "check": "income_positive_max",
+      "failure_case": 117000000.0,
+      "row_index": 12840
+    },
+    {
+      "column": "AMT_ANNUITY",
+      "check": "required_not_null",
+      "failure_case": null,
+      "row_index": 207186
+    },
+    {
+      "column": "CODE_GENDER",
+      "check": "domain_CODE_GENDER",
+      "failure_case": "XNA",
+      "row_index": 83382
+    },
+    {
+      "column": "CODE_GENDER",
+      "check": "domain_CODE_GENDER",
+      "failure_case": "XNA",
+      "row_index": 38566
+    },
+    {
+      "column": "CODE_GENDER",
+      "check": "domain_CODE_GENDER",
+      "failure_case": "XNA",
+      "row_index": 35657
+    },
+    {
+      "column": "NAME_FAMILY_STATUS",
+      "check": "domain_NAME_FAMILY_STATUS",
+      "failure_case": "Unknown",
+      "row_index": 187348
+    },
+    {
+      "column": "NAME_FAMILY_STATUS",
+      "check": "domain_NAME_FAMILY_STATUS",
+      "failure_case": "Unknown",
+      "row_index": 41982
+    },
+    {
+      "column": "CNT_FAM_MEMBERS",
+      "check": "required_not_null",
+      "failure_case": null,
+      "row_index": 187348
+    },
+    {
+      "column": "CNT_FAM_MEMBERS",
+      "check": "required_not_null",
+      "failure_case": null,
+      "row_index": 41982
+    },
+    {
+      "column": "AMT_ANNUITY",
+      "check": "required_not_null",
+      "failure_case": null,
+      "row_index": 241835
+    },
+    {
+      "column": "AMT_ANNUITY",
+      "check": "required_not_null",
+      "failure_case": null,
+      "row_index": 239329
+    },
+    {
+      "column": "AMT_ANNUITY",
+      "check": "required_not_null",
+      "failure_case": null,
+      "row_index": 227939
+    },
+    {
+      "column": "AMT_ANNUITY",
+      "check": "required_not_null",
+      "failure_case": null,
+      "row_index": 123872
+    },
+    {
+      "column": "AMT_INCOME_TOTAL",
+      "check": "income_positive_max",
+      "failure_case": 9000000.0,
+      "row_index": 77768
+    },
+    {
+      "column": "AMT_ANNUITY",
+      "check": "required_not_null",
+      "failure_case": null,
+      "row_index": 89343
+    },
+    {
+      "column": "AMT_ANNUITY",
+      "check": "required_not_null",
+      "failure_case": null,
+      "row_index": 75873
+    },
+    {
+      "column": "AMT_ANNUITY",
+      "check": "required_not_null",
+      "failure_case": null,
+      "row_index": 59934
+    },
+    {
+      "column": "AMT_ANNUITY",
+      "check": "required_not_null",
+      "failure_case": null,
+      "row_index": 55025
+    },
+    {
+      "column": "AMT_ANNUITY",
+      "check": "required_not_null",
+      "failure_case": null,
+      "row_index": 51594
+    },
+    {
+      "column": "AMT_ANNUITY",
+      "check": "required_not_null",
+      "failure_case": null,
+      "row_index": 50035
+    },
+    {
+      "column": "AMT_ANNUITY",
+      "check": "required_not_null",
+      "failure_case": null,
+      "row_index": 47531
+    },
+    {
+      "column": "AMT_INCOME_TOTAL",
+      "check": "income_positive_max",
+      "failure_case": 13500000.0,
+      "row_index": 246858
+    },
+    {
+      "column": "AMT_INCOME_TOTAL",
+      "check": "income_positive_max",
+      "failure_case": 18000090.0,
+      "row_index": 203693
+    },
+    {
+      "column": "AMT_INCOME_TOTAL",
+      "check": "income_positive_max",
+      "failure_case": 6750000.0,
+      "row_index": 131127
+    },
+    {
+      "column": "CODE_GENDER",
+      "check": "domain_CODE_GENDER",
+      "failure_case": "XNA",
+      "row_index": 189640
+    }
+  ]
+}

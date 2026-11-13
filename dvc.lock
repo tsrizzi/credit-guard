@@ -1,0 +1,59 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python -m credit_guard.data.prepare
+    deps:
+    - path: data/raw/application_train.csv
+      hash: md5
+      md5: 793a017f41fbac1dc28176b26dbab30e
+      size: 166133370
+    - path: src/credit_guard/contracts
+      hash: md5
+      md5: ff58fbffbc8051f3b532b4973909c3ee.dir
+      size: 36677
+      nfiles: 10
+    - path: src/credit_guard/data
+      hash: md5
+      md5: a5ef51a4f9e1e47956a99dd682b10bef.dir
+      size: 12001
+      nfiles: 4
+    params:
+      params.yaml:
+        contract:
+          age_min: 18
+          age_max: 100
+          income_max: 5000000
+          children_max: 20
+        prepare:
+          ref_train_frac: 0.6
+          ref_test_frac: 0.15
+        seed: 42
+    outs:
+    - path: data/holdout
+      hash: md5
+      md5: 38e5db53d1ea6aa1fa7efb39cb19dcfb.dir
+      size: 3661094
+      nfiles: 1
+    - path: data/protected
+      hash: md5
+      md5: 3705cf189d825cf6d81493935ab00cee.dir
+      size: 6137575
+      nfiles: 2
+    - path: data/quarantine
+      hash: md5
+      md5: 88f2f59cac7194f3746020a5a0a713d2.dir
+      size: 15851
+      nfiles: 1
+    - path: data/reference
+      hash: md5
+      md5: e9ac8a6e81f4c75d9ea97abf7608107d.dir
+      size: 10439375
+      nfiles: 2
+    - path: reports/validation/reference_raw.html
+      hash: md5
+      md5: d0dad2ea2c269231fc5a544c358ad5ed
+      size: 3201
+    - path: reports/validation/reference_raw.json
+      hash: md5
+      md5: d1d19fee1154da8305eca07644baa068
+      size: 3974
