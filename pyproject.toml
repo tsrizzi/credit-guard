@@ -44,6 +44,12 @@ ignore = ["E501"]  # o formatter controla o tamanho do codigo; templates HTML/do
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+filterwarnings = [
+    # deprecacoes internas de dependencias de terceiros (nao do nosso codigo)
+    "ignore::DeprecationWarning:evidently.*",
+    "ignore::DeprecationWarning:litestar.*",
+    "ignore::DeprecationWarning:numpy.*",
+]
 
 [dependency-groups]
 dev = [
