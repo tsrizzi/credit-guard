@@ -28,6 +28,7 @@ from credit_guard.config import (
 from credit_guard.contracts.report import write_validation_report
 from credit_guard.contracts.validation import ValidationResult, validate_batch
 from credit_guard.logging_utils import get_logger
+from credit_guard.observability.pipeline import StageContext, track_stage
 
 log = get_logger("prepare")
 
@@ -73,11 +74,13 @@ def _salt() -> str:
     return os.environ.get("ID_SALT", DEFAULT_SALT)
 
 
-def main() -> None:
+def _run(ctx: StageContext) -> None:
     params = load_params()
     raw = load_raw(DATA_DIR / "raw" / "application_train.csv")
     clean, quarantined, result = quarantine_invalid(raw)
     write_validation_report(result, REPORTS_DIR / "validation", "reference_raw")
+    ctx.add_rows("accepted", len(clean))
+    ctx.add_rows("quarantined", len(quarantined))
 
     for sub in ("reference", "holdout", "protected", "quarantine"):
         (DATA_DIR / sub).mkdir(parents=True, exist_ok=True)
@@ -104,6 +107,11 @@ def main() -> None:
             **{f"{k}_rows": len(v) for k, v in parts.items()},
         },
     )
+
+
+def main() -> None:
+    with track_stage("prepare") as ctx:
+        _run(ctx)
 
 
 if __name__ == "__main__":

@@ -15,6 +15,7 @@ import pandas as pd
 from credit_guard.contracts.report import write_validation_report
 from credit_guard.contracts.validation import validate_batch
 from credit_guard.logging_utils import get_logger
+from credit_guard.observability.pipeline import track_stage
 
 log = get_logger("ingest")
 
@@ -36,7 +37,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    result = validate_batch(read_batch(args.input), include_protected=args.include_protected)
+    with track_stage(f"ingest_{args.name}") as ctx:
+        result = validate_batch(read_batch(args.input), include_protected=args.include_protected)
+        ctx.add_rows("accepted" if result.passed else "blocked", result.n_rows)
     json_path, html_path = write_validation_report(result, args.report_dir, args.name)
     extra = {
         "batch": args.name,

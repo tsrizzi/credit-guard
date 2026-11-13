@@ -14,6 +14,7 @@ from credit_guard.config import DATA_DIR, MODELS_DIR, REPORTS_DIR, ROOT, TARGET_
 from credit_guard.logging_utils import get_logger
 from credit_guard.model.features import MODEL_FEATURES, base_feature_importance, build_pipeline
 from credit_guard.model.metrics import evaluate_scores
+from credit_guard.observability.pipeline import StageContext, track_stage
 
 log = get_logger("train")
 
@@ -34,7 +35,7 @@ def _file_md5(path) -> str:
     return h.hexdigest()
 
 
-def main() -> None:
+def _run(ctx: StageContext) -> None:
     import mlflow
     from mlflow.models import infer_signature
 
@@ -47,6 +48,7 @@ def main() -> None:
 
     pipe = build_pipeline(model_params, seed=params["seed"])
     pipe.fit(train, train[TARGET_COLUMN])
+    ctx.add_rows("trained", len(train))
     proba_test = pipe.predict_proba(test)[:, 1]
     threshold = fit_threshold(proba_test, target_rate)
     metrics = evaluate_scores(test[TARGET_COLUMN], proba_test, threshold)
@@ -98,6 +100,11 @@ def main() -> None:
     log.info(
         "train_done", extra={"model_version": model_version, **metrics, "threshold": threshold}
     )
+
+
+def main() -> None:
+    with track_stage("train") as ctx:
+        _run(ctx)
 
 
 if __name__ == "__main__":

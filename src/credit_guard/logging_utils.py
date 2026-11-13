@@ -26,18 +26,29 @@ class JsonFormatter(logging.Formatter):
         return json.dumps(payload, default=str, ensure_ascii=False)
 
 
+class _CurrentStderrHandler(logging.StreamHandler):
+    """Escreve sempre no sys.stderr *atual* (sobrevive a redirecionamentos, ex.: pytest)."""
+
+    _credit_guard = True
+
+    def __init__(self) -> None:
+        super().__init__()
+
+    @property
+    def stream(self):  # type: ignore[override]
+        return sys.stderr
+
+    @stream.setter
+    def stream(self, _value) -> None:
+        pass
+
+
 def get_logger(name: str) -> logging.Logger:
     logger = logging.getLogger(f"credit_guard.{name}")
-    if not any(getattr(h, "_credit_guard", False) for h in logger.handlers):
-        handler = logging.StreamHandler(sys.stderr)
+    if not any(isinstance(h, _CurrentStderrHandler) for h in logger.handlers):
+        handler = _CurrentStderrHandler()
         handler.setFormatter(JsonFormatter())
-        handler._credit_guard = True  # type: ignore[attr-defined]
         logger.addHandler(handler)
         logger.setLevel(logging.INFO)
         logger.propagate = False
-    else:
-        # capsys/pytest troca sys.stderr; reaponta o handler para o stream atual
-        for h in logger.handlers:
-            if getattr(h, "_credit_guard", False):
-                h.setStream(sys.stderr)
     return logger

@@ -9,6 +9,7 @@ import pandas as pd
 
 from credit_guard.config import DATA_DIR, REPORTS_DIR, TARGET_COLUMN, load_params
 from credit_guard.logging_utils import get_logger
+from credit_guard.observability.pipeline import StageContext, track_stage
 from credit_guard.simulation.dirty import make_dirty_batch
 from credit_guard.simulation.drift import apply_concept_drift, apply_data_drift, concept_flip_rate
 
@@ -26,7 +27,7 @@ def month_profile(df: pd.DataFrame) -> dict:
     }
 
 
-def main() -> None:
+def _run(ctx: StageContext) -> None:
     params = load_params()
     sim, seed = params["simulation"], params["seed"]
     rng = np.random.default_rng(seed)
@@ -44,6 +45,7 @@ def main() -> None:
         base = holdout.iloc[(m - 1) * n : m * n]
         drifted = apply_concept_drift(apply_data_drift(base, m, sim, rng), m, sim, rng)
         drifted.to_parquet(out_dir / f"month_{m:02d}.parquet", index=False)
+        ctx.add_rows("generated", len(drifted))
         manifest["months"][f"{m:02d}"] = {
             "factors": {
                 "price_multiplier": 1 + sim["price_inflation_per_month"] * m,
@@ -70,6 +72,11 @@ def main() -> None:
     log.info(
         "simulate_done", extra={"months": months, "rows_per_month": n, "dirty": dirty_manifest}
     )
+
+
+def main() -> None:
+    with track_stage("simulate") as ctx:
+        _run(ctx)
 
 
 if __name__ == "__main__":
