@@ -39,6 +39,7 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP"]
+ignore = ["E501"]  # o formatter controla o tamanho do codigo; templates HTML/docs ficam livres
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
