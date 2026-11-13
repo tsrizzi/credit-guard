@@ -60,3 +60,12 @@ def test_other_rules():
 def test_every_rule_has_runbook_anchor():
     for name, link in RUNBOOKS.items():
         assert link.startswith("README.md#runbook-"), name
+
+
+def test_fairness_alert_only_when_drift_worsens_known_bias():
+    ref = {**REF, "di_gender": 0.91, "di_age": 0.65}
+    same_bias = _summary(di_gender=0.90, di_age=0.64)
+    assert evaluate_alerts(same_bias, ref, MON) == []
+    worse = _summary(di_gender=0.90, di_age=0.55)
+    alerts = evaluate_alerts(worse, ref, MON)
+    assert [a.name for a in alerts] == ["FairnessDisparateImpact"]

@@ -9,13 +9,13 @@ stages:
       size: 166133370
     - path: src/credit_guard/contracts
       hash: md5
-      md5: be844c1a1d9f76476ddee99aa1f0a036.dir
-      size: 37376
+      md5: 174801f60245cc1ecd6d61d1b4bba1b1.dir
+      size: 38110
       nfiles: 10
     - path: src/credit_guard/data
       hash: md5
-      md5: a5ef51a4f9e1e47956a99dd682b10bef.dir
-      size: 12001
+      md5: 7643d247ef852b5ab521b1877dde4d2c.dir
+      size: 13128
       nfiles: 4
     params:
       params.yaml:
@@ -51,11 +51,11 @@ stages:
       nfiles: 2
     - path: reports/validation/reference_raw.html
       hash: md5
-      md5: 2157384df23a6378eb6d55f42207d50b
+      md5: de6cabfd6c400a66e316c7912d90852e
       size: 3201
     - path: reports/validation/reference_raw.json
       hash: md5
-      md5: 69911373424fe9c43deef267e68d7fb3
+      md5: 77d81d58edcf9f2bdffa2fc596149fce
       size: 3974
   train:
     cmd: python -m credit_guard.model.train
@@ -67,9 +67,9 @@ stages:
       nfiles: 2
     - path: src/credit_guard/model
       hash: md5
-      md5: 0806f35319d87ca4f2b465ce89455f43.dir
-      size: 24084
-      nfiles: 9
+      md5: 6d2df857cd996a72add0922177809c84.dir
+      size: 27138
+      nfiles: 10
     params:
       params.yaml:
         model:
@@ -109,16 +109,16 @@ stages:
       nfiles: 1
     - path: src/credit_guard/simulation/dirty.py
       hash: md5
-      md5: 4999a4b889b0d8d67ca6b38764aac949
-      size: 2711
+      md5: 0375e3eecbbf700d54ed1dba2564828e
+      size: 2725
     - path: src/credit_guard/simulation/drift.py
       hash: md5
       md5: b4b8b5438cdcb735991e5bf74a26a858
       size: 2329
     - path: src/credit_guard/simulation/simulate.py
       hash: md5
-      md5: 4a8889fdf2dac8d5ed248f96fbb01893
-      size: 3054
+      md5: 4201b02e7f70e8c3c412618e560e3550
+      size: 3371
     params:
       params.yaml:
         seed: 42
@@ -167,23 +167,77 @@ stages:
       nfiles: 6
     - path: src/credit_guard/contracts
       hash: md5
-      md5: be844c1a1d9f76476ddee99aa1f0a036.dir
-      size: 37376
+      md5: 174801f60245cc1ecd6d61d1b4bba1b1.dir
+      size: 38110
       nfiles: 10
     outs:
     - path: reports/validation/dirty_batch.html
       hash: md5
-      md5: 0dcb8e2b898daada6cbcebe9c6f56b5f
+      md5: 07ff98774df66ec484a92d219b968567
       size: 5842
     - path: reports/validation/dirty_batch.json
       hash: md5
-      md5: 563d4f2edde382ab150730e5e519f612
+      md5: 0fd57120df1d2654f9fbb86c5d27b6e5
       size: 7852
     - path: reports/validation/month_01.html
       hash: md5
-      md5: e2ce0bb71691a2ae4218405ca0f2b2ae
+      md5: 3de01138b6b5a31ccb9447248ea0a479
       size: 871
     - path: reports/validation/month_01.json
       hash: md5
-      md5: d25879cde5dc23d46e7c9ff617a26784
+      md5: 408c61b87a890b72dd5b3f520fc2d6e2
       size: 225
+  monitor:
+    cmd: python -m credit_guard.monitoring.monitor
+    deps:
+    - path: data/production
+      hash: md5
+      md5: 19cd6ed6c2ccc4a15cb82d46c329e225.dir
+      size: 3464470
+      nfiles: 6
+    - path: data/protected
+      hash: md5
+      md5: 3705cf189d825cf6d81493935ab00cee.dir
+      size: 6137575
+      nfiles: 2
+    - path: data/reference
+      hash: md5
+      md5: e9ac8a6e81f4c75d9ea97abf7608107d.dir
+      size: 10439375
+      nfiles: 2
+    - path: models
+      hash: md5
+      md5: ac95789f4ed94dbb8269fc2d97a2eefc.dir
+      size: 680716
+      nfiles: 2
+    - path: src/credit_guard/monitoring
+      hash: md5
+      md5: e79eacbde010898c64f50b412785acfd.dir
+      size: 71880
+      nfiles: 14
+    params:
+      params.yaml:
+        monitoring:
+          psi_bins: 10
+          ks_alpha: 0.05
+          auc_drop_alert: 0.03
+          approval_shift_alert: 0.05
+          drifted_share_alert: 0.3
+          rejection_rate_alert: 0.01
+          fairness_di_drop_alert: 0.05
+    outs:
+    - path: reports/causal
+      hash: md5
+      md5: 86d631a5c1f5d0687184848a5f8f5a4b.dir
+      size: 4981
+      nfiles: 2
+    - path: reports/drift
+      hash: md5
+      md5: 927d4fe1f32889c8c77106e457644559.dir
+      size: 5523915
+      nfiles: 1
+    - path: reports/monitoring
+      hash: md5
+      md5: d8d623b9057c7a7e28d7297776065859.dir
+      size: 31951798
+      nfiles: 26

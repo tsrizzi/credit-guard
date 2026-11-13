@@ -32,3 +32,4 @@ monitoring:
   approval_shift_alert: 0.05
   drifted_share_alert: 0.30
   rejection_rate_alert: 0.01
+  fairness_di_drop_alert: 0.05   # alerta se DI < 0,8 e caiu >= 0,05 vs. referencia

@@ -1,0 +1,406 @@
+{
+  "month": 5,
+  "n_rows": 10000,
+  "contract_passed": true,
+  "rejection_rate": 0.0,
+  "drift_table": [
+    {
+      "feature": "EXT_SOURCE_2",
+      "kind": "numeric",
+      "psi": 1.0637379426943996,
+      "psi_band": "significant",
+      "ks_stat": 0.2630389373536033,
+      "ks_pvalue": 0.0,
+      "js": 0.33048705136855744,
+      "chi2_pvalue": null,
+      "drift": true
+    },
+    {
+      "feature": "AMT_GOODS_PRICE",
+      "kind": "numeric",
+      "psi": 0.6612749743434136,
+      "psi_band": "significant",
+      "ks_stat": 0.1884753985832754,
+      "ks_pvalue": 6.817911018713649e-256,
+      "js": 0.3370223729819155,
+      "chi2_pvalue": null,
+      "drift": true
+    },
+    {
+      "feature": "NAME_INCOME_TYPE",
+      "kind": "categorical",
+      "psi": 0.5280745946979799,
+      "psi_band": "significant",
+      "ks_stat": null,
+      "ks_pvalue": null,
+      "js": 0.20263923474943038,
+      "chi2_pvalue": 0.0,
+      "drift": true
+    },
+    {
+      "feature": "annuity_income_ratio",
+      "kind": "numeric",
+      "psi": 0.5149341645016727,
+      "psi_band": "significant",
+      "ks_stat": 0.3004231376290001,
+      "ks_pvalue": 0.0,
+      "js": 0.29831289260875127,
+      "chi2_pvalue": null,
+      "drift": true
+    },
+    {
+      "feature": "AMT_INCOME_TOTAL",
+      "kind": "numeric",
+      "psi": 0.4955779273932836,
+      "psi_band": "significant",
+      "ks_stat": 0.22342395282282546,
+      "ks_pvalue": 0.0,
+      "js": 0.2848728891071414,
+      "chi2_pvalue": null,
+      "drift": true
+    },
+    {
+      "feature": "EXT_SOURCE_3",
+      "kind": "numeric",
+      "psi": 0.3862591374896908,
+      "psi_band": "significant",
+      "ks_stat": 0.2060614112277469,
+      "ks_pvalue": 3.3402377634116582e-245,
+      "js": 0.2353988141968071,
+      "chi2_pvalue": null,
+      "drift": true
+    },
+    {
+      "feature": "credit_income_ratio",
+      "kind": "numeric",
+      "psi": 0.3031984043845152,
+      "psi_band": "significant",
+      "ks_stat": 0.22261436995924028,
+      "ks_pvalue": 0.0,
+      "js": 0.2303332002491406,
+      "chi2_pvalue": null,
+      "drift": true
+    },
+    {
+      "feature": "AMT_CREDIT",
+      "kind": "numeric",
+      "psi": 0.20368681744696926,
+      "psi_band": "significant",
+      "ks_stat": 0.15967164166160785,
+      "ks_pvalue": 1.694015282343311e-183,
+      "js": 0.19032029953118795,
+      "chi2_pvalue": null,
+      "drift": true
+    },
+    {
+      "feature": "AMT_ANNUITY",
+      "kind": "numeric",
+      "psi": 0.19138698340601723,
+      "psi_band": "moderate",
+      "ks_stat": 0.18214559882057058,
+      "ks_pvalue": 4.538932472278984e-239,
+      "js": 0.1839945868412223,
+      "chi2_pvalue": null,
+      "drift": false
+    },
+    {
+      "feature": "years_employed",
+      "kind": "numeric",
+      "psi": 0.03349120229546979,
+      "psi_band": "stable",
+      "ks_stat": 0.010407773781165752,
+      "ks_pvalue": 0.5049287735802521,
+      "js": 0.07756088229755496,
+      "chi2_pvalue": null,
+      "drift": false
+    },
+    {
+      "feature": "credit_term",
+      "kind": "numeric",
+      "psi": 0.0022355847461423446,
+      "psi_band": "stable",
+      "ks_stat": 0.009860012141184593,
+      "ks_pvalue": 0.3987301025595609,
+      "js": 0.020075511398356217,
+      "chi2_pvalue": null,
+      "drift": false
+    },
+    {
+      "feature": "goods_credit_ratio",
+      "kind": "numeric",
+      "psi": 0.0017832291124516913,
+      "psi_band": "stable",
+      "ks_stat": 0.012452886056334322,
+      "ks_pvalue": 0.1552709533283413,
+      "js": 0.01792257945918875,
+      "chi2_pvalue": null,
+      "drift": false
+    },
+    {
+      "feature": "EXT_SOURCE_1",
+      "kind": "numeric",
+      "psi": 0.001242094830634338,
+      "psi_band": "stable",
+      "ks_stat": 0.019637209237945652,
+      "ks_pvalue": 0.12544385779010092,
+      "js": 0.014964607109085173,
+      "chi2_pvalue": null,
+      "drift": false
+    },
+    {
+      "feature": "age_years",
+      "kind": "numeric",
+      "psi": 0.0008379043677744274,
+      "psi_band": "stable",
+      "ks_stat": 0.0064180730205532915,
+      "ks_pvalue": 0.8851706435987475,
+      "js": 0.01229202943955665,
+      "chi2_pvalue": null,
+      "drift": false
+    },
+    {
+      "feature": "NAME_EDUCATION_TYPE",
+      "kind": "categorical",
+      "psi": 0.0007575237280228996,
+      "psi_band": "stable",
+      "ks_stat": null,
+      "ks_pvalue": null,
+      "js": 0.011676878679835927,
+      "chi2_pvalue": 0.1632516725319462,
+      "drift": false
+    },
+    {
+      "feature": "DAYS_ID_PUBLISH",
+      "kind": "numeric",
+      "psi": 0.0005364770162636094,
+      "psi_band": "stable",
+      "ks_stat": 0.012172638973202643,
+      "ks_pvalue": 0.17359832633429206,
+      "js": 0.009835716939719848,
+      "chi2_pvalue": null,
+      "drift": false
+    },
+    {
+      "feature": "NAME_FAMILY_STATUS",
+      "kind": "categorical",
+      "psi": 0.00043064125555183615,
+      "psi_band": "stable",
+      "ks_stat": null,
+      "ks_pvalue": null,
+      "js": 0.008811992856754361,
+      "chi2_pvalue": 0.47875517552400504,
+      "drift": false
+    },
+    {
+      "feature": "CNT_CHILDREN",
+      "kind": "numeric",
+      "psi": 0.0002675445639302986,
+      "psi_band": "stable",
+      "ks_stat": 0.0074531436995924905,
+      "ks_pvalue": 0.748324705192586,
+      "js": 0.006946017356469098,
+      "chi2_pvalue": null,
+      "drift": false
+    },
+    {
+      "feature": "CNT_FAM_MEMBERS",
+      "kind": "numeric",
+      "psi": 0.00019348678917210411,
+      "psi_band": "stable",
+      "ks_stat": 0.005656985517301205,
+      "ks_pvalue": 0.9537964813137929,
+      "js": 0.005906971135179699,
+      "chi2_pvalue": null,
+      "drift": false
+    },
+    {
+      "feature": "FLAG_OWN_REALTY",
+      "kind": "categorical",
+      "psi": 6.707170971985002e-05,
+      "psi_band": "stable",
+      "ks_stat": null,
+      "ks_pvalue": null,
+      "js": 0.0034778507731283844,
+      "chi2_pvalue": 0.464598110774773,
+      "drift": false
+    },
+    {
+      "feature": "REGION_RATING_CLIENT",
+      "kind": "numeric",
+      "psi": 2.91085026426947e-05,
+      "psi_band": "stable",
+      "ks_stat": 0.005783635417569988,
+      "ks_pvalue": 0.9447388041262648,
+      "js": 0.002291132346446938,
+      "chi2_pvalue": null,
+      "drift": false
+    },
+    {
+      "feature": "NAME_CONTRACT_TYPE",
+      "kind": "categorical",
+      "psi": 2.951187021567533e-07,
+      "psi_band": "stable",
+      "ks_stat": null,
+      "ks_pvalue": null,
+      "js": 0.00023069629473897012,
+      "chi2_pvalue": 0.9757461857902557,
+      "drift": false
+    },
+    {
+      "feature": "FLAG_OWN_CAR",
+      "kind": "categorical",
+      "psi": 5.8457956701858275e-09,
+      "psi_band": "stable",
+      "ks_stat": null,
+      "ks_pvalue": null,
+      "js": 3.246864075752837e-05,
+      "chi2_pvalue": 1.0,
+      "drift": false
+    },
+    {
+      "feature": "is_not_employed",
+      "kind": "numeric",
+      "psi": 0.0,
+      "psi_band": "stable",
+      "ks_stat": 0.07408122452519306,
+      "ks_pvalue": 1.1449769809704527e-39,
+      "js": 0.0,
+      "chi2_pvalue": null,
+      "drift": false
+    }
+  ],
+  "share_drifted": 0.3333333333333333,
+  "drifted_features": [
+    "EXT_SOURCE_2",
+    "AMT_GOODS_PRICE",
+    "NAME_INCOME_TYPE",
+    "annuity_income_ratio",
+    "AMT_INCOME_TOTAL",
+    "EXT_SOURCE_3",
+    "credit_income_ratio",
+    "AMT_CREDIT"
+  ],
+  "evidently": {
+    "drifted_features": [
+      "AMT_INCOME_TOTAL",
+      "AMT_CREDIT",
+      "AMT_ANNUITY",
+      "AMT_GOODS_PRICE",
+      "EXT_SOURCE_2",
+      "EXT_SOURCE_3",
+      "credit_income_ratio",
+      "annuity_income_ratio",
+      "NAME_INCOME_TYPE"
+    ],
+    "share_drifted": 0.375,
+    "n_features": 24
+  },
+  "auc": 0.7034080176518988,
+  "ks": 0.3044063733571614,
+  "approval_rate": 0.6585,
+  "default_rate_approved": 0.06135155656795748,
+  "default_rate": 0.1034,
+  "mean_score": 0.11950766295194626,
+  "fairness": [
+    {
+      "attribute": "CODE_GENDER",
+      "group": "F",
+      "n": 6631,
+      "approval_rate": 0.6819484240687679,
+      "default_rate": 0.09515910119137384,
+      "tpr": 0.7103333333333334
+    },
+    {
+      "attribute": "CODE_GENDER",
+      "group": "M",
+      "n": 3369,
+      "approval_rate": 0.6123478777085188,
+      "default_rate": 0.11962006530127635,
+      "tpr": 0.6469993256911666
+    },
+    {
+      "attribute": "age_band",
+      "group": "25-34",
+      "n": 2310,
+      "approval_rate": 0.5190476190476191,
+      "default_rate": 0.1303030303030303,
+      "tpr": 0.5515181682429069
+    },
+    {
+      "attribute": "age_band",
+      "group": "35-44",
+      "n": 2768,
+      "approval_rate": 0.6394508670520231,
+      "default_rate": 0.11958092485549134,
+      "tpr": 0.6737792367665162
+    },
+    {
+      "attribute": "age_band",
+      "group": "45-54",
+      "n": 2308,
+      "approval_rate": 0.7261698440207972,
+      "default_rate": 0.09618717504332755,
+      "tpr": 0.7559923298178332
+    },
+    {
+      "attribute": "age_band",
+      "group": "55+",
+      "n": 2188,
+      "approval_rate": 0.8080438756855576,
+      "default_rate": 0.05621572212065813,
+      "tpr": 0.8213075060532687
+    },
+    {
+      "attribute": "age_band",
+      "group": "<25",
+      "n": 426,
+      "approval_rate": 0.40375586854460094,
+      "default_rate": 0.13380281690140844,
+      "tpr": 0.4281842818428184
+    }
+  ],
+  "di_gender": 0.8979386946229961,
+  "di_age": 0.49967072419433645,
+  "alerts": [
+    {
+      "name": "FeatureDriftCritical",
+      "severity": "critical",
+      "value": 1.0637379426943996,
+      "threshold": 0.2,
+      "message": "PSI >= 0,20 em feature top: EXT_SOURCE_2, NAME_INCOME_TYPE, EXT_SOURCE_3",
+      "runbook": "README.md#runbook-feature-drift-critical"
+    },
+    {
+      "name": "DriftedShareHigh",
+      "severity": "warning",
+      "value": 0.3333333333333333,
+      "threshold": 0.3,
+      "message": "fracao alta de features em drift",
+      "runbook": "README.md#runbook-drifted-share-high"
+    },
+    {
+      "name": "ModelAucDrop",
+      "severity": "critical",
+      "value": 0.06055251436378739,
+      "threshold": 0.03,
+      "message": "AUC caiu de 0.764 para 0.703",
+      "runbook": "README.md#runbook-model-auc-drop"
+    },
+    {
+      "name": "ApprovalRateShift",
+      "severity": "warning",
+      "value": 0.14149566386263124,
+      "threshold": 0.05,
+      "message": "taxa de aprovacao deslocou da referencia",
+      "runbook": "README.md#runbook-approval-rate-shift"
+    },
+    {
+      "name": "FairnessDisparateImpact",
+      "severity": "warning",
+      "value": 0.49967072419433645,
+      "threshold": 0.8,
+      "message": "disparate impact < 0,8 e piorando vs. referencia (faixa etaria)",
+      "runbook": "README.md#runbook-fairness-disparate-impact"
+    }
+  ]
+}

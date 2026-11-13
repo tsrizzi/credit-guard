@@ -1,0 +1,73 @@
+{
+  "auc": 0.7639605320156861,
+  "ks": 0.39431160448290536,
+  "approval_rate": 0.7999956638626312,
+  "default_rate": 0.08073887780764895,
+  "top_features": [
+    "NAME_EDUCATION_TYPE",
+    "EXT_SOURCE_2",
+    "EXT_SOURCE_3",
+    "NAME_INCOME_TYPE",
+    "NAME_FAMILY_STATUS"
+  ],
+  "di_gender": 0.9125442820967375,
+  "di_age": 0.6489666849731551,
+  "fairness": [
+    {
+      "attribute": "CODE_GENDER",
+      "group": "F",
+      "n": 30294,
+      "approval_rate": 0.8247507757311678,
+      "default_rate": 0.07107017891331617,
+      "tpr": 0.8492235528232828
+    },
+    {
+      "attribute": "CODE_GENDER",
+      "group": "M",
+      "n": 15830,
+      "approval_rate": 0.7526216045483259,
+      "default_rate": 0.09924194567277321,
+      "tpr": 0.7884143348060874
+    },
+    {
+      "attribute": "age_band",
+      "group": "25-34",
+      "n": 10835,
+      "approval_rate": 0.6852791878172588,
+      "default_rate": 0.10466082141209045,
+      "tpr": 0.7230182455416967
+    },
+    {
+      "attribute": "age_band",
+      "group": "35-44",
+      "n": 12710,
+      "approval_rate": 0.7966955153422502,
+      "default_rate": 0.08442171518489379,
+      "tpr": 0.8265016756896107
+    },
+    {
+      "attribute": "age_band",
+      "group": "45-54",
+      "n": 10479,
+      "approval_rate": 0.8369119190762477,
+      "default_rate": 0.07138085695199924,
+      "tpr": 0.8613708765800021
+    },
+    {
+      "attribute": "age_band",
+      "group": "55+",
+      "n": 10195,
+      "approval_rate": 0.9253555664541442,
+      "default_rate": 0.05159391858754291,
+      "tpr": 0.9363946633571207
+    },
+    {
+      "attribute": "age_band",
+      "group": "<25",
+      "n": 1905,
+      "approval_rate": 0.6005249343832021,
+      "default_rate": 0.12755905511811025,
+      "tpr": 0.6450060168471721
+    }
+  ]
+}

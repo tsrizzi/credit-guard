@@ -103,15 +103,26 @@ def evaluate_alerts(month_summary: dict, reference_summary: dict, mon: dict) -> 
             )
         )
 
-    dis = [v for v in (s.get("di_gender"), s.get("di_age")) if v is not None and not math.isnan(v)]
-    if dis and min(dis) < DI_MIN:
+    # Fairness: dispara quando o DI esta abaixo da regra dos 80% E piorou em relacao a referencia.
+    # Um vies ja presente na referencia e tratado na governanca (README), nao realertado todo mes.
+    drop_limit = mon.get("fairness_di_drop_alert", 0.05)
+    breaches = []
+    for key, label in (("di_gender", "genero"), ("di_age", "faixa etaria")):
+        value, ref_value = s.get(key), ref.get(key)
+        if value is None or math.isnan(value) or value >= DI_MIN:
+            continue
+        if ref_value is None or math.isnan(ref_value) or ref_value - value >= drop_limit:
+            breaches.append((value, label))
+    if breaches:
+        value, _ = min(breaches)
+        labels = ", ".join(lbl for _, lbl in breaches)
         alerts.append(
             _alert(
                 "FairnessDisparateImpact",
                 "warning",
-                min(dis),
+                value,
                 DI_MIN,
-                "disparate impact abaixo da regra dos 80%",
+                f"disparate impact < 0,8 e piorando vs. referencia ({labels})",
             )
         )
     return alerts

@@ -68,3 +68,20 @@ stages:
           cache: false
       - reports/validation/month_01.html:
           cache: false
+  monitor:
+    cmd: python -m credit_guard.monitoring.monitor
+    deps:
+      - data/production
+      - data/reference
+      - data/protected
+      - models
+      - src/credit_guard/monitoring
+    params:
+      - monitoring
+    outs:
+      - reports/monitoring:
+          cache: false
+      - reports/drift:
+          cache: false
+      - reports/causal:
+          cache: false
