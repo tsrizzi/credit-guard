@@ -1,0 +1,34 @@
+seed: 42
+prepare:
+  ref_train_frac: 0.60
+  ref_test_frac: 0.15      # restante (0.25) = holdout para os meses de producao
+contract:
+  age_min: 18
+  age_max: 100
+  income_max: 5000000
+  children_max: 20
+model:
+  n_estimators: 400
+  max_depth: 4
+  learning_rate: 0.05
+  subsample: 0.8
+  colsample_bytree: 0.8
+  target_approval_rate: 0.80
+simulation:
+  n_months: 6
+  rows_per_month: 10000
+  dirty_rows: 500
+  price_inflation_per_month: 0.05      # AMT_CREDIT/ANNUITY/GOODS_PRICE *= 1 + r*m
+  real_income_erosion_per_month: 0.03  # AMT_INCOME_TOTAL *= 1 - r*m
+  unemployment_shift_per_month: 0.03   # fracao de Working -> Unemployed (+ sentinela)
+  ext_source_decline_per_month: 0.02   # EXT_SOURCE_2/3 -= r*m, limitado a [0,1]
+  concept_start_month: 4
+  concept_flip_rate_per_month: 0.05    # P(0->1) no segmento = r*(m - start + 1)
+  concept_segment_income_type: "Commercial associate"
+monitoring:
+  psi_bins: 10
+  ks_alpha: 0.05
+  auc_drop_alert: 0.03
+  approval_shift_alert: 0.05
+  drifted_share_alert: 0.30
+  rejection_rate_alert: 0.01
