@@ -57,3 +57,40 @@ stages:
       hash: md5
       md5: d1d19fee1154da8305eca07644baa068
       size: 3974
+  train:
+    cmd: python -m credit_guard.model.train
+    deps:
+    - path: data/reference
+      hash: md5
+      md5: e9ac8a6e81f4c75d9ea97abf7608107d.dir
+      size: 10439375
+      nfiles: 2
+    - path: src/credit_guard/model
+      hash: md5
+      md5: 0806f35319d87ca4f2b465ce89455f43.dir
+      size: 24084
+      nfiles: 9
+    params:
+      params.yaml:
+        model:
+          n_estimators: 400
+          max_depth: 4
+          learning_rate: 0.05
+          subsample: 0.8
+          colsample_bytree: 0.8
+          target_approval_rate: 0.8
+        seed: 42
+    outs:
+    - path: models
+      hash: md5
+      md5: ac95789f4ed94dbb8269fc2d97a2eefc.dir
+      size: 680716
+      nfiles: 2
+    - path: reports/model/feature_importance.csv
+      hash: md5
+      md5: 8d7005eaf1ec574f6255deb12895933d
+      size: 705
+    - path: reports/model/metrics.json
+      hash: md5
+      md5: 6591bd88d3303b8a988ec2330082bc0f
+      size: 297

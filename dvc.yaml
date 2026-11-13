@@ -18,3 +18,18 @@ stages:
           cache: false
       - reports/validation/reference_raw.html:
           cache: false
+  train:
+    cmd: python -m credit_guard.model.train
+    deps:
+      - data/reference
+      - src/credit_guard/model
+    params:
+      - seed
+      - model
+    outs:
+      - models
+      - reports/model/feature_importance.csv:
+          cache: false
+    metrics:
+      - reports/model/metrics.json:
+          cache: false
