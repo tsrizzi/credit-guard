@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+.ipynb_checkpoints/
+
+# Segredos e configuracao local
+.env
+.dvc/config.local
+
+# Dados (versionados via DVC, nunca no git; os .dvc e .gitignore gerados pelo DVC sao versionados)
+data/**/*.csv
+data/**/*.parquet
+data/**/*.zip
+/models/
+archive*.zip
+/logs/
+
+# MLflow local
+mlflow.db
+mlartifacts/
+mlruns/
+
+# Material interno fora do entregavel
+doc-fora-comit/
+
