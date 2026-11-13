@@ -1,0 +1,10 @@
+{
+  "batch": "month_01",
+  "generated_at": "2026-11-13T23:34:16.587317+00:00",
+  "passed": true,
+  "verdict": "APROVADO",
+  "n_rows": 10000,
+  "n_invalid_rows": 0,
+  "violations_by_check": {},
+  "failure_cases": []
+}

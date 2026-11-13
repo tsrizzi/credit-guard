@@ -1,0 +1,321 @@
+{
+  "batch": "dirty_batch",
+  "generated_at": "2026-11-13T23:34:15.474018+00:00",
+  "passed": false,
+  "verdict": "BLOQUEADO",
+  "n_rows": 500,
+  "n_invalid_rows": 500,
+  "violations_by_check": {
+    "unique_client_id": 136,
+    "required_not_null": 83,
+    "annuity_le_credit": 69,
+    "employment_sentinel_consistency": 69,
+    "domain_NAME_CONTRACT_TYPE": 69,
+    "age_between_18_100": 69,
+    "ext_source_unit_interval": 68,
+    "income_positive_max": 5,
+    "domain_NAME_FAMILY_STATUS": 2
+  },
+  "failure_cases": [
+    {
+      "column": null,
+      "check": "annuity_le_credit",
+      "failure_case": "Single / not married",
+      "row_index": 428
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 540000.0,
+      "row_index": 350
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 112500.0,
+      "row_index": 286
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 450000.0,
+      "row_index": 288
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 1125000.0,
+      "row_index": 292
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 180000.0,
+      "row_index": 301
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 450000.0,
+      "row_index": 313
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 270000.0,
+      "row_index": 319
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 450000.0,
+      "row_index": 335
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 454500.0,
+      "row_index": 339
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 180000.0,
+      "row_index": 342
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 945000.0,
+      "row_index": 343
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 675000.0,
+      "row_index": 353
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 1305000.0,
+      "row_index": 355
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 270000.0,
+      "row_index": 361
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 1035000.0,
+      "row_index": 362
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 1588500.0,
+      "row_index": 365
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 382500.0,
+      "row_index": 383
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 207000.0,
+      "row_index": 389
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 1125000.0,
+      "row_index": 397
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 238500.0,
+      "row_index": 410
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 1129500.0,
+      "row_index": 413
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 454500.0,
+      "row_index": 415
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 900000.0,
+      "row_index": 279
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 679500.0,
+      "row_index": 274
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 135000.0,
+      "row_index": 272
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 778500.0,
+      "row_index": 255
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 1125000.0,
+      "row_index": 85
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 490500.0,
+      "row_index": 93
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 900000.0,
+      "row_index": 99
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 180000.0,
+      "row_index": 102
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 270000.0,
+      "row_index": 107
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 1093500.0,
+      "row_index": 119
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 1350000.0,
+      "row_index": 123
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 454500.0,
+      "row_index": 125
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 454500.0,
+      "row_index": 144
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 405000.0,
+      "row_index": 170
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 135000.0,
+      "row_index": 171
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 472500.0,
+      "row_index": 192
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 450000.0,
+      "row_index": 207
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 1125000.0,
+      "row_index": 210
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 270000.0,
+      "row_index": 214
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 702000.0,
+      "row_index": 221
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 1557000.0,
+      "row_index": 225
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 225000.0,
+      "row_index": 226
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 922500.0,
+      "row_index": 236
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 180000.0,
+      "row_index": 239
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 450000.0,
+      "row_index": 248
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 112500.0,
+      "row_index": 421
+    },
+    {
+      "column": null,
+      "check": "employment_sentinel_consistency",
+      "failure_case": 225000.0,
+      "row_index": 439
+    }
+  ]
+}

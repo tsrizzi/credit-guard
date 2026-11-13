@@ -1,0 +1,176 @@
+{
+  "params": {
+    "n_months": 6,
+    "rows_per_month": 10000,
+    "dirty_rows": 500,
+    "price_inflation_per_month": 0.05,
+    "real_income_erosion_per_month": 0.03,
+    "unemployment_shift_per_month": 0.03,
+    "ext_source_decline_per_month": 0.02,
+    "concept_start_month": 4,
+    "concept_flip_rate_per_month": 0.05,
+    "concept_segment_income_type": "Commercial associate"
+  },
+  "months": {
+    "01": {
+      "factors": {
+        "price_multiplier": 1.05,
+        "income_multiplier": 0.97,
+        "working_to_unemployed_share": 0.03,
+        "ext_source_decline": 0.02,
+        "concept_flip_rate": 0.0
+      },
+      "before": {
+        "rows": 10000,
+        "mean_income": 168544.219725,
+        "mean_credit": 602544.0942,
+        "unemployed_share": 0.0,
+        "mean_ext_source_2": 0.5163285814337101,
+        "default_rate": 0.0805
+      },
+      "after": {
+        "rows": 10000,
+        "mean_income": 163487.89313325,
+        "mean_credit": 632671.29891,
+        "unemployed_share": 0.0156,
+        "mean_ext_source_2": 0.49641133543805827,
+        "default_rate": 0.0805
+      }
+    },
+    "02": {
+      "factors": {
+        "price_multiplier": 1.1,
+        "income_multiplier": 0.94,
+        "working_to_unemployed_share": 0.06,
+        "ext_source_decline": 0.04,
+        "concept_flip_rate": 0.0
+      },
+      "before": {
+        "rows": 10000,
+        "mean_income": 168543.96093,
+        "mean_credit": 597028.38075,
+        "unemployed_share": 0.0,
+        "mean_ext_source_2": 0.5157115642050748,
+        "default_rate": 0.0781
+      },
+      "after": {
+        "rows": 10000,
+        "mean_income": 158431.3232742,
+        "mean_credit": 656731.218825,
+        "unemployed_share": 0.0312,
+        "mean_ext_source_2": 0.47604085680366354,
+        "default_rate": 0.0781
+      }
+    },
+    "03": {
+      "factors": {
+        "price_multiplier": 1.15,
+        "income_multiplier": 0.91,
+        "working_to_unemployed_share": 0.09,
+        "ext_source_decline": 0.06,
+        "concept_flip_rate": 0.0
+      },
+      "before": {
+        "rows": 10000,
+        "mean_income": 169017.8706,
+        "mean_credit": 603018.60615,
+        "unemployed_share": 0.0,
+        "mean_ext_source_2": 0.5136736052953336,
+        "default_rate": 0.0786
+      },
+      "after": {
+        "rows": 10000,
+        "mean_income": 153806.262246,
+        "mean_credit": 693471.3970725001,
+        "unemployed_share": 0.0456,
+        "mean_ext_source_2": 0.4542797699536962,
+        "default_rate": 0.0786
+      }
+    },
+    "04": {
+      "factors": {
+        "price_multiplier": 1.2,
+        "income_multiplier": 0.88,
+        "working_to_unemployed_share": 0.12,
+        "ext_source_decline": 0.08,
+        "concept_flip_rate": 0.05
+      },
+      "before": {
+        "rows": 10000,
+        "mean_income": 168031.5228,
+        "mean_credit": 596076.79725,
+        "unemployed_share": 0.0002,
+        "mean_ext_source_2": 0.5132242474956246,
+        "default_rate": 0.0794
+      },
+      "after": {
+        "rows": 10000,
+        "mean_income": 147867.74006399998,
+        "mean_credit": 715292.1567,
+        "unemployed_share": 0.0622,
+        "mean_ext_source_2": 0.43427075989701736,
+        "default_rate": 0.09
+      }
+    },
+    "05": {
+      "factors": {
+        "price_multiplier": 1.25,
+        "income_multiplier": 0.85,
+        "working_to_unemployed_share": 0.15,
+        "ext_source_decline": 0.1,
+        "concept_flip_rate": 0.1
+      },
+      "before": {
+        "rows": 10000,
+        "mean_income": 169160.2132455,
+        "mean_credit": 600032.97675,
+        "unemployed_share": 0.0001,
+        "mean_ext_source_2": 0.5138148949282347,
+        "default_rate": 0.0825
+      },
+      "after": {
+        "rows": 10000,
+        "mean_income": 143786.181258675,
+        "mean_credit": 750041.2209375,
+        "unemployed_share": 0.0773,
+        "mean_ext_source_2": 0.4157065847573425,
+        "default_rate": 0.1034
+      }
+    },
+    "06": {
+      "factors": {
+        "price_multiplier": 1.3,
+        "income_multiplier": 0.8200000000000001,
+        "working_to_unemployed_share": 0.18,
+        "ext_source_decline": 0.12,
+        "concept_flip_rate": 0.15000000000000002
+      },
+      "before": {
+        "rows": 10000,
+        "mean_income": 167758.79652,
+        "mean_credit": 602996.7771,
+        "unemployed_share": 0.0001,
+        "mean_ext_source_2": 0.5127674048614652,
+        "default_rate": 0.0837
+      },
+      "after": {
+        "rows": 10000,
+        "mean_income": 137562.2131464,
+        "mean_credit": 783895.8102300001,
+        "unemployed_share": 0.0926,
+        "mean_ext_source_2": 0.39558422480840016,
+        "default_rate": 0.1189
+      }
+    }
+  },
+  "dirty_batch": {
+    "real_quarantined": 19,
+    "null_income": 69,
+    "underage": 69,
+    "annuity_gt_credit": 69,
+    "working_with_sentinel": 69,
+    "unknown_contract_type": 69,
+    "ext_source_out_of_range": 68,
+    "duplicated_id": 68
+  }
+}

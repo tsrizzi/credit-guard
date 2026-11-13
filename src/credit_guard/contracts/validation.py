@@ -98,7 +98,12 @@ def validate_batch(
                 "failure_case": fc["failure_case"],
                 "row_index": fc["index"],
             }
-        ).reset_index(drop=True)
+        )
+        # checagens no nivel do DataFrame sao reportadas uma vez por coluna: vira uma por linha
+        frame_level = (fc["schema_context"] == "DataFrameSchema") & fc["index"].notna()
+        violations.loc[frame_level, "column"] = None
+        violations = violations.drop_duplicates(subset=["check", "row_index", "column"])
+        violations = violations.reset_index(drop=True)
         if violations["row_index"].isna().any():
             # violacao no nivel do lote (ex.: coluna ausente) invalida todas as linhas
             invalid = list(df.index)

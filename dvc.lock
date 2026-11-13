@@ -9,8 +9,8 @@ stages:
       size: 166133370
     - path: src/credit_guard/contracts
       hash: md5
-      md5: ff58fbffbc8051f3b532b4973909c3ee.dir
-      size: 36677
+      md5: be844c1a1d9f76476ddee99aa1f0a036.dir
+      size: 37376
       nfiles: 10
     - path: src/credit_guard/data
       hash: md5
@@ -51,11 +51,11 @@ stages:
       nfiles: 2
     - path: reports/validation/reference_raw.html
       hash: md5
-      md5: d0dad2ea2c269231fc5a544c358ad5ed
+      md5: 2157384df23a6378eb6d55f42207d50b
       size: 3201
     - path: reports/validation/reference_raw.json
       hash: md5
-      md5: d1d19fee1154da8305eca07644baa068
+      md5: 69911373424fe9c43deef267e68d7fb3
       size: 3974
   train:
     cmd: python -m credit_guard.model.train
@@ -94,3 +94,96 @@ stages:
       hash: md5
       md5: 6591bd88d3303b8a988ec2330082bc0f
       size: 297
+  simulate:
+    cmd: python -m credit_guard.simulation.simulate
+    deps:
+    - path: data/holdout
+      hash: md5
+      md5: 38e5db53d1ea6aa1fa7efb39cb19dcfb.dir
+      size: 3661094
+      nfiles: 1
+    - path: data/quarantine
+      hash: md5
+      md5: 88f2f59cac7194f3746020a5a0a713d2.dir
+      size: 15851
+      nfiles: 1
+    - path: src/credit_guard/simulation/dirty.py
+      hash: md5
+      md5: 4999a4b889b0d8d67ca6b38764aac949
+      size: 2711
+    - path: src/credit_guard/simulation/drift.py
+      hash: md5
+      md5: b4b8b5438cdcb735991e5bf74a26a858
+      size: 2329
+    - path: src/credit_guard/simulation/simulate.py
+      hash: md5
+      md5: 4a8889fdf2dac8d5ed248f96fbb01893
+      size: 3054
+    params:
+      params.yaml:
+        seed: 42
+        simulation:
+          n_months: 6
+          rows_per_month: 10000
+          dirty_rows: 500
+          price_inflation_per_month: 0.05
+          real_income_erosion_per_month: 0.03
+          unemployment_shift_per_month: 0.03
+          ext_source_decline_per_month: 0.02
+          concept_start_month: 4
+          concept_flip_rate_per_month: 0.05
+          concept_segment_income_type: Commercial associate
+    outs:
+    - path: data/dirty
+      hash: md5
+      md5: 3b1ff99f38ea84241a4f39273f4794f1.dir
+      size: 45991
+      nfiles: 1
+    - path: data/production
+      hash: md5
+      md5: 19cd6ed6c2ccc4a15cb82d46c329e225.dir
+      size: 3464470
+      nfiles: 6
+    - path: reports/simulation/manifest.json
+      hash: md5
+      md5: 520591504bfb21941c2f4b9c6ef5cf94
+      size: 5126
+  contract_check:
+    cmd: python -m credit_guard.contracts.ingest --input 
+      data/dirty/dirty_batch.parquet --report-dir reports/validation --name 
+      dirty_batch --expect-reject && python -m credit_guard.contracts.ingest 
+      --input data/production/month_01.parquet --report-dir reports/validation 
+      --name month_01
+    deps:
+    - path: data/dirty
+      hash: md5
+      md5: 3b1ff99f38ea84241a4f39273f4794f1.dir
+      size: 45991
+      nfiles: 1
+    - path: data/production
+      hash: md5
+      md5: 19cd6ed6c2ccc4a15cb82d46c329e225.dir
+      size: 3464470
+      nfiles: 6
+    - path: src/credit_guard/contracts
+      hash: md5
+      md5: be844c1a1d9f76476ddee99aa1f0a036.dir
+      size: 37376
+      nfiles: 10
+    outs:
+    - path: reports/validation/dirty_batch.html
+      hash: md5
+      md5: 0dcb8e2b898daada6cbcebe9c6f56b5f
+      size: 5842
+    - path: reports/validation/dirty_batch.json
+      hash: md5
+      md5: 563d4f2edde382ab150730e5e519f612
+      size: 7852
+    - path: reports/validation/month_01.html
+      hash: md5
+      md5: e2ce0bb71691a2ae4218405ca0f2b2ae
+      size: 871
+    - path: reports/validation/month_01.json
+      hash: md5
+      md5: d25879cde5dc23d46e7c9ff617a26784
+      size: 225

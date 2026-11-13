@@ -133,3 +133,11 @@ def test_ingest_cli_accepts_valid(raw_like_df, tmp_path):
     args = ["--input", str(path), "--report-dir", str(tmp_path), "--name", "ok"]
     assert ingest.main(args) == 0
     assert ingest.main([*args, "--expect-reject"]) == 1
+
+
+def test_dataframe_level_check_counts_one_violation_per_row(raw_like_df):
+    df = raw_like_df.copy()
+    df.loc[[0, 1, 2], "AMT_ANNUITY"] = df.loc[[0, 1, 2], "AMT_CREDIT"] + 1
+    result = validate_batch(df)
+    assert result.violations_by_check["annuity_le_credit"] == 3
+    assert result.n_invalid_rows == 3

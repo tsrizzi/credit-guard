@@ -33,3 +33,38 @@ stages:
     metrics:
       - reports/model/metrics.json:
           cache: false
+  simulate:
+    cmd: python -m credit_guard.simulation.simulate
+    deps:
+      - data/holdout
+      - data/quarantine
+      - src/credit_guard/simulation/drift.py
+      - src/credit_guard/simulation/dirty.py
+      - src/credit_guard/simulation/simulate.py
+    params:
+      - seed
+      - simulation
+    outs:
+      - data/production
+      - data/dirty
+      - reports/simulation/manifest.json:
+          cache: false
+  contract_check:
+    cmd: >-
+      python -m credit_guard.contracts.ingest --input data/dirty/dirty_batch.parquet
+      --report-dir reports/validation --name dirty_batch --expect-reject
+      && python -m credit_guard.contracts.ingest --input data/production/month_01.parquet
+      --report-dir reports/validation --name month_01
+    deps:
+      - data/dirty
+      - data/production
+      - src/credit_guard/contracts
+    outs:
+      - reports/validation/dirty_batch.json:
+          cache: false
+      - reports/validation/dirty_batch.html:
+          cache: false
+      - reports/validation/month_01.json:
+          cache: false
+      - reports/validation/month_01.html:
+          cache: false
