@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import hashlib
+import hmac
 import os
 from pathlib import Path
 
@@ -36,14 +37,30 @@ DEFAULT_SALT = "fiap-fase4-dev-salt"  # apenas desenvolvimento; em producao vem 
 PROTECTED_TABLE_COLUMNS = [ID_COLUMN, *PROTECTED_COLUMNS, "DAYS_BIRTH"]
 
 
-def pseudonymize_ids(ids: pd.Series, salt: str) -> pd.Series:
-    return ids.astype(str).map(lambda v: hashlib.sha256(f"{salt}{v}".encode()).hexdigest()[:16])
+def pseudonymize_ids(ids: pd.Series, key: str) -> pd.Series:
+    """HMAC-SHA256 com chave secreta: sem a chave, nao da para recalcular o pseudonimo a partir
+    de IDs candidatos (um hash com salt publico seria reversivel por forca bruta)."""
+    k = key.encode()
+    return ids.astype(str).map(lambda v: hmac.new(k, v.encode(), hashlib.sha256).hexdigest()[:16])
+
+
+def resolve_id_key() -> str:
+    key = os.environ.get("ID_SALT")
+    if not key:
+        log.warning(
+            "public_dev_pseudonymization_key",
+            extra={
+                "detail": "ID_SALT ausente: usando a chave PUBLICA de desenvolvimento; os pseudonimos sao apenas ilustrativos"
+            },
+        )
+        return DEFAULT_SALT
+    return key
 
 
 def load_raw(path: Path, salt: str | None = None) -> pd.DataFrame:
     cols = [RAW_ID_COLUMN, TARGET_COLUMN, *PROTECTED_COLUMNS, *INPUT_COLUMNS]
     df = pd.read_csv(path, usecols=cols)
-    df.insert(0, ID_COLUMN, pseudonymize_ids(df.pop(RAW_ID_COLUMN), salt or _salt()))
+    df.insert(0, ID_COLUMN, pseudonymize_ids(df.pop(RAW_ID_COLUMN), salt or resolve_id_key()))
     return df
 
 
@@ -68,10 +85,6 @@ def split_frames(clean: pd.DataFrame, params: dict) -> dict[str, pd.DataFrame]:
 
 def separate_protected(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     return df.drop(columns=PROTECTED_COLUMNS), df[PROTECTED_TABLE_COLUMNS].copy()
-
-
-def _salt() -> str:
-    return os.environ.get("ID_SALT", DEFAULT_SALT)
 
 
 def _run(ctx: StageContext) -> None:

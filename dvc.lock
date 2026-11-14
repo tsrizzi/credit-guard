@@ -9,13 +9,13 @@ stages:
       size: 166133370
     - path: src/credit_guard/contracts
       hash: md5
-      md5: 174801f60245cc1ecd6d61d1b4bba1b1.dir
-      size: 38110
+      md5: 5d0221da24a3df70efadf25305249a79.dir
+      size: 43874
       nfiles: 10
     - path: src/credit_guard/data
       hash: md5
-      md5: 7643d247ef852b5ab521b1877dde4d2c.dir
-      size: 13128
+      md5: 2cc648a71f6a2bbf86e8cb5c8405b7fe.dir
+      size: 14249
       nfiles: 4
     params:
       params.yaml:
@@ -23,6 +23,7 @@ stages:
           age_min: 18
           age_max: 100
           income_max: 5000000
+          amount_max: 50000000
           children_max: 20
         prepare:
           ref_train_frac: 0.6
@@ -31,44 +32,44 @@ stages:
     outs:
     - path: data/holdout
       hash: md5
-      md5: 38e5db53d1ea6aa1fa7efb39cb19dcfb.dir
-      size: 3661094
+      md5: dfccb5a827651959a7b92fc4626161e2.dir
+      size: 3661144
       nfiles: 1
     - path: data/protected
       hash: md5
-      md5: 3705cf189d825cf6d81493935ab00cee.dir
-      size: 6137575
+      md5: 8f3ab85c48a291e7abe5b4c040511b2e.dir
+      size: 6139065
       nfiles: 2
     - path: data/quarantine
       hash: md5
-      md5: 88f2f59cac7194f3746020a5a0a713d2.dir
-      size: 15851
+      md5: a412591200abb5dfddfbb2703d297b20.dir
+      size: 15849
       nfiles: 1
     - path: data/reference
       hash: md5
-      md5: e9ac8a6e81f4c75d9ea97abf7608107d.dir
-      size: 10439375
+      md5: d5237af96a23f56e257687561d0057e7.dir
+      size: 10440275
       nfiles: 2
     - path: reports/validation/reference_raw.html
       hash: md5
-      md5: de6cabfd6c400a66e316c7912d90852e
-      size: 3201
+      md5: 14c4ef4513d5bbcda644c3154c14a36a
+      size: 2461
     - path: reports/validation/reference_raw.json
       hash: md5
-      md5: 77d81d58edcf9f2bdffa2fc596149fce
-      size: 3974
+      md5: c58eb4f51b539ad64c84e2d9898d43ce
+      size: 2721
   train:
     cmd: python -m credit_guard.model.train
     deps:
     - path: data/reference
       hash: md5
-      md5: e9ac8a6e81f4c75d9ea97abf7608107d.dir
-      size: 10439375
+      md5: d5237af96a23f56e257687561d0057e7.dir
+      size: 10440275
       nfiles: 2
     - path: src/credit_guard/model
       hash: md5
-      md5: 6d2df857cd996a72add0922177809c84.dir
-      size: 27138
+      md5: 4ac3784d88fa87257ed243454d311ddd.dir
+      size: 27945
       nfiles: 10
     params:
       params.yaml:
@@ -83,7 +84,7 @@ stages:
     outs:
     - path: models
       hash: md5
-      md5: ac95789f4ed94dbb8269fc2d97a2eefc.dir
+      md5: e4785e522e09bed68be0c444f7dae689.dir
       size: 680716
       nfiles: 2
     - path: reports/model/feature_importance.csv
@@ -99,13 +100,13 @@ stages:
     deps:
     - path: data/holdout
       hash: md5
-      md5: 38e5db53d1ea6aa1fa7efb39cb19dcfb.dir
-      size: 3661094
+      md5: dfccb5a827651959a7b92fc4626161e2.dir
+      size: 3661144
       nfiles: 1
     - path: data/quarantine
       hash: md5
-      md5: 88f2f59cac7194f3746020a5a0a713d2.dir
-      size: 15851
+      md5: a412591200abb5dfddfbb2703d297b20.dir
+      size: 15849
       nfiles: 1
     - path: src/credit_guard/simulation/dirty.py
       hash: md5
@@ -136,13 +137,13 @@ stages:
     outs:
     - path: data/dirty
       hash: md5
-      md5: f03c7743d1d8049dbc2b456734da3799.dir
-      size: 45870
+      md5: b57f84888fecadc89083f4994fd9b371.dir
+      size: 45871
       nfiles: 1
     - path: data/production
       hash: md5
-      md5: 1253248157cb8fcf98432371c92c042b.dir
-      size: 5270241
+      md5: 57d729a8dd0b3f7c4d1d01f6d2168bbc.dir
+      size: 5270044
       nfiles: 6
     - path: reports/simulation/manifest.json
       hash: md5
@@ -157,63 +158,63 @@ stages:
     deps:
     - path: data/dirty
       hash: md5
-      md5: f03c7743d1d8049dbc2b456734da3799.dir
-      size: 45870
+      md5: b57f84888fecadc89083f4994fd9b371.dir
+      size: 45871
       nfiles: 1
     - path: data/production
       hash: md5
-      md5: 1253248157cb8fcf98432371c92c042b.dir
-      size: 5270241
+      md5: 57d729a8dd0b3f7c4d1d01f6d2168bbc.dir
+      size: 5270044
       nfiles: 6
     - path: src/credit_guard/contracts
       hash: md5
-      md5: 174801f60245cc1ecd6d61d1b4bba1b1.dir
-      size: 38110
+      md5: 5d0221da24a3df70efadf25305249a79.dir
+      size: 43874
       nfiles: 10
     outs:
     - path: reports/validation/dirty_batch.html
       hash: md5
-      md5: e03e652ecc6d3326c91764d39817a8ae
-      size: 5820
+      md5: 76df4d0b1131965e5788e055ab78267f
+      size: 5561
     - path: reports/validation/dirty_batch.json
       hash: md5
-      md5: 8e981616edf82117606b920883422f9c
-      size: 7830
+      md5: da138a3445f3cf73e66a7e1b010e1a12
+      size: 7257
     - path: reports/validation/month_01.html
       hash: md5
-      md5: cc3fb57c27666ec521da5476c41b702d
+      md5: 5db22cc45088bcfdc5d6d9f160c994cb
       size: 871
     - path: reports/validation/month_01.json
       hash: md5
-      md5: 9e0fd3798678bcbd629258aebe492b91
+      md5: 1b14df20908b1b6f5134c839033987fe
       size: 225
   monitor:
     cmd: python -m credit_guard.monitoring.monitor
     deps:
     - path: data/production
       hash: md5
-      md5: 1253248157cb8fcf98432371c92c042b.dir
-      size: 5270241
+      md5: 57d729a8dd0b3f7c4d1d01f6d2168bbc.dir
+      size: 5270044
       nfiles: 6
     - path: data/protected
       hash: md5
-      md5: 3705cf189d825cf6d81493935ab00cee.dir
-      size: 6137575
+      md5: 8f3ab85c48a291e7abe5b4c040511b2e.dir
+      size: 6139065
       nfiles: 2
     - path: data/reference
       hash: md5
-      md5: e9ac8a6e81f4c75d9ea97abf7608107d.dir
-      size: 10439375
+      md5: d5237af96a23f56e257687561d0057e7.dir
+      size: 10440275
       nfiles: 2
     - path: models
       hash: md5
-      md5: ac95789f4ed94dbb8269fc2d97a2eefc.dir
+      md5: e4785e522e09bed68be0c444f7dae689.dir
       size: 680716
       nfiles: 2
     - path: src/credit_guard/monitoring
       hash: md5
-      md5: e1ae6e78e7f398502564d2430f964be2.dir
-      size: 77111
+      md5: 37a874a53825a76ca2d69702fcaf1aa5.dir
+      size: 81014
       nfiles: 14
     params:
       params.yaml:
@@ -228,16 +229,16 @@ stages:
     outs:
     - path: reports/causal
       hash: md5
-      md5: 5fd1de097b056cc71c7cd5b1949a1c47.dir
-      size: 6537
+      md5: a09af8e1f4f041677c8cee50f570a240.dir
+      size: 6545
       nfiles: 4
     - path: reports/drift
       hash: md5
-      md5: 0dcb8dc39a3e092d903fd837d7be31e6.dir
-      size: 5530264
+      md5: 27d05096a23710af4c8a75e44ac8d2da.dir
+      size: 5529694
       nfiles: 1
     - path: reports/monitoring
       hash: md5
-      md5: c8f45669fbe5b36929acad145078f386.dir
-      size: 31978840
+      md5: 169f15e0b2dfdfcc392538bad8115c4b.dir
+      size: 31974825
       nfiles: 26

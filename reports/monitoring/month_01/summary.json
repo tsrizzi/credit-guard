@@ -272,11 +272,8 @@
   "share_drifted": 0.0,
   "drifted_features": [],
   "evidently": {
-    "drifted_features": [
-      "credit_income_ratio",
-      "annuity_income_ratio"
-    ],
-    "share_drifted": 0.08333333333333333,
+    "drifted_features": [],
+    "share_drifted": 0.0,
     "n_features": 24
   },
   "auc": 0.7774561519054035,

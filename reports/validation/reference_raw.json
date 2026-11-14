@@ -1,6 +1,6 @@
 {
   "batch": "reference_raw",
-  "generated_at": "2026-11-13T23:41:59.579563+00:00",
+  "generated_at": "2026-11-14T00:35:10.931706+00:00",
   "passed": false,
   "verdict": "BLOQUEADO",
   "n_rows": 307511,
@@ -79,64 +79,10 @@
       "row_index": 239329
     },
     {
-      "column": "AMT_ANNUITY",
-      "check": "required_not_null",
-      "failure_case": null,
-      "row_index": 227939
-    },
-    {
-      "column": "AMT_ANNUITY",
-      "check": "required_not_null",
-      "failure_case": null,
-      "row_index": 123872
-    },
-    {
       "column": "AMT_INCOME_TOTAL",
       "check": "income_positive_max",
       "failure_case": 9000000.0,
       "row_index": 77768
-    },
-    {
-      "column": "AMT_ANNUITY",
-      "check": "required_not_null",
-      "failure_case": null,
-      "row_index": 89343
-    },
-    {
-      "column": "AMT_ANNUITY",
-      "check": "required_not_null",
-      "failure_case": null,
-      "row_index": 75873
-    },
-    {
-      "column": "AMT_ANNUITY",
-      "check": "required_not_null",
-      "failure_case": null,
-      "row_index": 59934
-    },
-    {
-      "column": "AMT_ANNUITY",
-      "check": "required_not_null",
-      "failure_case": null,
-      "row_index": 55025
-    },
-    {
-      "column": "AMT_ANNUITY",
-      "check": "required_not_null",
-      "failure_case": null,
-      "row_index": 51594
-    },
-    {
-      "column": "AMT_ANNUITY",
-      "check": "required_not_null",
-      "failure_case": null,
-      "row_index": 50035
-    },
-    {
-      "column": "AMT_ANNUITY",
-      "check": "required_not_null",
-      "failure_case": null,
-      "row_index": 47531
     },
     {
       "column": "AMT_INCOME_TOTAL",

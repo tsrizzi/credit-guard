@@ -273,16 +273,9 @@
   "drifted_features": [],
   "evidently": {
     "drifted_features": [
-      "AMT_CREDIT",
-      "AMT_ANNUITY",
-      "AMT_GOODS_PRICE",
-      "EXT_SOURCE_2",
-      "EXT_SOURCE_3",
-      "credit_income_ratio",
-      "annuity_income_ratio",
       "NAME_INCOME_TYPE"
     ],
-    "share_drifted": 0.3333333333333333,
+    "share_drifted": 0.041666666666666664,
     "n_features": 24
   },
   "auc": 0.7735203934312023,

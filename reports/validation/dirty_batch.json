@@ -1,6 +1,6 @@
 {
   "batch": "dirty_batch",
-  "generated_at": "2026-11-13T23:57:03.866322+00:00",
+  "generated_at": "2026-11-14T00:35:25.529521+00:00",
   "passed": false,
   "verdict": "BLOQUEADO",
   "n_rows": 500,
@@ -8,314 +8,266 @@
   "violations_by_check": {
     "unique_client_id": 136,
     "required_not_null": 83,
-    "annuity_le_credit": 69,
-    "employment_sentinel_consistency": 69,
     "domain_NAME_CONTRACT_TYPE": 69,
+    "annuity_le_credit": 69,
     "age_between_18_100": 69,
+    "employment_sentinel_consistency": 69,
     "ext_source_unit_interval": 68,
     "income_positive_max": 5,
     "domain_NAME_FAMILY_STATUS": 2
   },
   "failure_cases": [
     {
-      "column": null,
+      "column": "AMT_INCOME_TOTAL",
+      "check": "required_not_null",
+      "failure_case": null,
+      "row_index": 58
+    },
+    {
+      "column": "AMT_INCOME_TOTAL",
+      "check": "required_not_null",
+      "failure_case": null,
+      "row_index": 101
+    },
+    {
+      "column": "AMT_INCOME_TOTAL",
+      "check": "required_not_null",
+      "failure_case": null,
+      "row_index": 51
+    },
+    {
+      "column": "AMT_INCOME_TOTAL",
+      "check": "required_not_null",
+      "failure_case": null,
+      "row_index": 66
+    },
+    {
+      "column": "AMT_INCOME_TOTAL",
+      "check": "required_not_null",
+      "failure_case": null,
+      "row_index": 79
+    },
+    {
+      "column": "client_id",
+      "check": "unique_client_id",
+      "failure_case": "96464b693b9edfd8",
+      "row_index": 450
+    },
+    {
+      "column": "client_id",
+      "check": "unique_client_id",
+      "failure_case": "9aba4d37a247cb90",
+      "row_index": 493
+    },
+    {
+      "column": "client_id",
+      "check": "unique_client_id",
+      "failure_case": "d9747c988795e259",
+      "row_index": 451
+    },
+    {
+      "column": "client_id",
+      "check": "unique_client_id",
+      "failure_case": "383e48ed4fac86e8",
+      "row_index": 420
+    },
+    {
+      "column": "client_id",
+      "check": "unique_client_id",
+      "failure_case": "e670f44916a99aa2",
+      "row_index": 423
+    },
+    {
+      "column": "AMT_INCOME_TOTAL",
+      "check": "income_positive_max",
+      "failure_case": 9000000.0,
+      "row_index": 13
+    },
+    {
+      "column": "AMT_INCOME_TOTAL",
+      "check": "income_positive_max",
+      "failure_case": 117000000.0,
+      "row_index": 248
+    },
+    {
+      "column": "AMT_INCOME_TOTAL",
+      "check": "income_positive_max",
+      "failure_case": 6750000.0,
+      "row_index": 259
+    },
+    {
+      "column": "AMT_INCOME_TOTAL",
+      "check": "income_positive_max",
+      "failure_case": 18000090.0,
+      "row_index": 366
+    },
+    {
+      "column": "AMT_INCOME_TOTAL",
+      "check": "income_positive_max",
+      "failure_case": 13500000.0,
+      "row_index": 468
+    },
+    {
+      "column": "NAME_CONTRACT_TYPE",
+      "check": "domain_NAME_CONTRACT_TYPE",
+      "failure_case": "Leasing",
+      "row_index": 25
+    },
+    {
+      "column": "EXT_SOURCE_3",
+      "check": "ext_source_unit_interval",
+      "failure_case": 1.7,
+      "row_index": 408
+    },
+    {
+      "column": "EXT_SOURCE_3",
+      "check": "ext_source_unit_interval",
+      "failure_case": 1.7,
+      "row_index": 448
+    },
+    {
+      "column": "EXT_SOURCE_3",
+      "check": "ext_source_unit_interval",
+      "failure_case": 1.7,
+      "row_index": 452
+    },
+    {
+      "column": "EXT_SOURCE_3",
+      "check": "ext_source_unit_interval",
+      "failure_case": 1.7,
+      "row_index": 457
+    },
+    {
+      "column": "EXT_SOURCE_3",
+      "check": "ext_source_unit_interval",
+      "failure_case": 1.7,
+      "row_index": 481
+    },
+    {
+      "column": "NAME_CONTRACT_TYPE",
+      "check": "domain_NAME_CONTRACT_TYPE",
+      "failure_case": "Leasing",
+      "row_index": 3
+    },
+    {
+      "column": "NAME_CONTRACT_TYPE",
+      "check": "domain_NAME_CONTRACT_TYPE",
+      "failure_case": "Leasing",
+      "row_index": 4
+    },
+    {
+      "column": "NAME_CONTRACT_TYPE",
+      "check": "domain_NAME_CONTRACT_TYPE",
+      "failure_case": "Leasing",
+      "row_index": 11
+    },
+    {
+      "column": "NAME_CONTRACT_TYPE",
+      "check": "domain_NAME_CONTRACT_TYPE",
+      "failure_case": "Leasing",
+      "row_index": 19
+    },
+    {
+      "column": "NAME_FAMILY_STATUS",
+      "check": "domain_NAME_FAMILY_STATUS",
+      "failure_case": "Unknown",
+      "row_index": 185
+    },
+    {
+      "column": "NAME_FAMILY_STATUS",
+      "check": "domain_NAME_FAMILY_STATUS",
+      "failure_case": "Unknown",
+      "row_index": 489
+    },
+    {
+      "column": "DAYS_BIRTH",
+      "check": "age_between_18_100",
+      "failure_case": -5840.0,
+      "row_index": 98
+    },
+    {
+      "column": "DAYS_BIRTH",
+      "check": "age_between_18_100",
+      "failure_case": -5840.0,
+      "row_index": 116
+    },
+    {
+      "column": "DAYS_BIRTH",
+      "check": "age_between_18_100",
+      "failure_case": -5840.0,
+      "row_index": 125
+    },
+    {
+      "column": "DAYS_BIRTH",
+      "check": "age_between_18_100",
+      "failure_case": -5840.0,
+      "row_index": 131
+    },
+    {
+      "column": "DAYS_BIRTH",
+      "check": "age_between_18_100",
+      "failure_case": -5840.0,
+      "row_index": 136
+    },
+    {
+      "column": "AMT_ANNUITY,AMT_CREDIT",
       "check": "annuity_le_credit",
-      "failure_case": "Married",
+      "failure_case": "AMT_ANNUITY=1333287.0, AMT_CREDIT=888858.0",
       "row_index": 445
     },
     {
-      "column": null,
+      "column": "DAYS_EMPLOYED,NAME_INCOME_TYPE",
       "check": "employment_sentinel_consistency",
-      "failure_case": 202500.0,
+      "failure_case": "DAYS_EMPLOYED=365243, NAME_INCOME_TYPE=Working",
       "row_index": 354
     },
     {
-      "column": null,
+      "column": "DAYS_EMPLOYED,NAME_INCOME_TYPE",
       "check": "employment_sentinel_consistency",
-      "failure_case": 675000.0,
+      "failure_case": "DAYS_EMPLOYED=365243, NAME_INCOME_TYPE=Working",
       "row_index": 295
     },
     {
-      "column": null,
+      "column": "DAYS_EMPLOYED,NAME_INCOME_TYPE",
       "check": "employment_sentinel_consistency",
-      "failure_case": 900000.0,
+      "failure_case": "DAYS_EMPLOYED=365243, NAME_INCOME_TYPE=Working",
       "row_index": 300
     },
     {
-      "column": null,
+      "column": "DAYS_EMPLOYED,NAME_INCOME_TYPE",
       "check": "employment_sentinel_consistency",
-      "failure_case": 1372500.0,
+      "failure_case": "DAYS_EMPLOYED=365243, NAME_INCOME_TYPE=Working",
       "row_index": 308
     },
     {
-      "column": null,
+      "column": "DAYS_EMPLOYED,NAME_INCOME_TYPE",
       "check": "employment_sentinel_consistency",
-      "failure_case": 112500.0,
+      "failure_case": "DAYS_EMPLOYED=365243, NAME_INCOME_TYPE=Working",
       "row_index": 324
     },
     {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 643500.0,
-      "row_index": 326
+      "column": "AMT_ANNUITY,AMT_CREDIT",
+      "check": "annuity_le_credit",
+      "failure_case": "AMT_ANNUITY=533304.0, AMT_CREDIT=355536.0",
+      "row_index": 446
     },
     {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 180000.0,
-      "row_index": 329
+      "column": "AMT_ANNUITY,AMT_CREDIT",
+      "check": "annuity_le_credit",
+      "failure_case": "AMT_ANNUITY=1350000.0, AMT_CREDIT=900000.0",
+      "row_index": 382
     },
     {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 112500.0,
-      "row_index": 330
+      "column": "AMT_ANNUITY,AMT_CREDIT",
+      "check": "annuity_le_credit",
+      "failure_case": "AMT_ANNUITY=508862.25, AMT_CREDIT=339241.5",
+      "row_index": 390
     },
     {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 517500.0,
-      "row_index": 332
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 306000.0,
-      "row_index": 338
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 450000.0,
-      "row_index": 348
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 54000.0,
-      "row_index": 360
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 454500.0,
-      "row_index": 431
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 630000.0,
-      "row_index": 363
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 337500.0,
-      "row_index": 378
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 225000.0,
-      "row_index": 384
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 697500.0,
-      "row_index": 392
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 1129500.0,
-      "row_index": 395
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 459000.0,
-      "row_index": 399
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 900000.0,
-      "row_index": 400
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 472500.0,
-      "row_index": 416
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 225000.0,
-      "row_index": 418
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 247500.0,
-      "row_index": 422
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 292500.0,
-      "row_index": 271
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 180000.0,
-      "row_index": 270
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 1350000.0,
-      "row_index": 268
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 904500.0,
-      "row_index": 256
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 270000.0,
-      "row_index": 93
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 333000.0,
-      "row_index": 99
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 238500.0,
-      "row_index": 100
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 90000.0,
-      "row_index": 104
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 675000.0,
-      "row_index": 107
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 1125000.0,
-      "row_index": 126
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 81000.0,
-      "row_index": 129
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 427500.0,
-      "row_index": 134
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 450000.0,
-      "row_index": 135
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 270000.0,
-      "row_index": 153
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 180000.0,
-      "row_index": 162
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 900000.0,
-      "row_index": 170
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 454500.0,
-      "row_index": 188
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 270000.0,
-      "row_index": 190
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 900000.0,
-      "row_index": 193
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 900000.0,
-      "row_index": 207
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 900000.0,
-      "row_index": 221
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 900000.0,
-      "row_index": 229
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 540000.0,
-      "row_index": 231
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 580500.0,
-      "row_index": 238
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 675000.0,
-      "row_index": 245
-    },
-    {
-      "column": null,
-      "check": "employment_sentinel_consistency",
-      "failure_case": 585000.0,
-      "row_index": 428
+      "column": "AMT_ANNUITY,AMT_CREDIT",
+      "check": "annuity_le_credit",
+      "failure_case": "AMT_ANNUITY=204390.0, AMT_CREDIT=136260.0",
+      "row_index": 403
     }
   ]
 }
