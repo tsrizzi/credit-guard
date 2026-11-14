@@ -1,0 +1,59 @@
+# Os nomes dos alertas sao os mesmos de credit_guard.monitoring.alerts e dos runbooks do README.
+groups:
+  - name: credit-model-degradation
+    rules:
+      - alert: FeatureDriftCritical
+        expr: credit_alerts_active{alert="FeatureDriftCritical"} == 1
+        labels: {severity: critical}
+        annotations:
+          summary: "PSI >= 0,20 em uma feature top do modelo"
+          runbook_url: "README.md#runbook-feature-drift-critical"
+      - alert: DriftedShareHigh
+        expr: credit_alerts_active{alert="DriftedShareHigh"} == 1
+        labels: {severity: warning}
+        annotations:
+          summary: "30% ou mais das features em drift significativo"
+          runbook_url: "README.md#runbook-drifted-share-high"
+      - alert: ModelAucDrop
+        expr: credit_alerts_active{alert="ModelAucDrop"} == 1
+        labels: {severity: critical}
+        annotations:
+          summary: "AUC caiu 3 p.p. ou mais vs. referencia (rotulos atrasados)"
+          runbook_url: "README.md#runbook-model-auc-drop"
+      - alert: ApprovalRateShift
+        expr: credit_alerts_active{alert="ApprovalRateShift"} == 1
+        labels: {severity: warning}
+        annotations:
+          summary: "Taxa de aprovacao deslocou 5 p.p. ou mais vs. referencia"
+          runbook_url: "README.md#runbook-approval-rate-shift"
+      - alert: FairnessDisparateImpact
+        expr: credit_alerts_active{alert="FairnessDisparateImpact"} == 1
+        labels: {severity: warning}
+        annotations:
+          summary: "Disparate impact < 0,8 e piorando vs. referencia"
+          runbook_url: "README.md#runbook-fairness-disparate-impact"
+
+  - name: credit-operational
+    rules:
+      - alert: ContractRejectionHigh
+        expr: |
+          sum(rate(credit_contract_rejections_total[1m]))
+            / clamp_min(sum(rate(credit_rows_scored_total[1m])) + sum(rate(credit_contract_rejections_total[1m])), 1e-9)
+            > 0.01
+        labels: {severity: critical}
+        annotations:
+          summary: "Contrato de dados rejeitando mais de 1% das linhas"
+          runbook_url: "README.md#runbook-contract-rejection-high"
+      - alert: ApiLatencyHigh
+        expr: histogram_quantile(0.95, sum by (le) (rate(credit_request_latency_seconds_bucket{path="/predict"}[1m]))) > 0.5
+        for: 1m
+        labels: {severity: warning}
+        annotations:
+          summary: "Latencia p95 do /predict acima de 500 ms"
+          runbook_url: "README.md#runbook-api-latency-high"
+      - alert: PipelineStageFailed
+        expr: credit_pipeline_stage_status == 0
+        labels: {severity: critical}
+        annotations:
+          summary: "Estagio do pipeline falhou: {{ $labels.stage }}"
+          runbook_url: "README.md#runbook-pipeline-stage-failed"

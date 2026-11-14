@@ -1,0 +1,7 @@
+apiVersion: 1
+providers:
+  - name: credit-guard
+    folder: Credit Guard
+    type: file
+    options:
+      path: /var/lib/grafana/dashboards
