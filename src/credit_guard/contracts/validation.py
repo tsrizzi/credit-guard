@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 import pandas as pd
 import pandera.errors as pa_errors
 
-from credit_guard.contracts.schema import build_input_schema
+from credit_guard.contracts.schema import FRAME_CHECK_COLUMNS, build_input_schema
 
 VIOLATION_COLUMNS = ["column", "check", "failure_case", "row_index"]
 
@@ -29,8 +29,10 @@ class ValidationResult:
             return {}
         return {str(k): int(v) for k, v in self.violations["check"].value_counts().items()}
 
-    def to_dict(self, max_cases: int = 50) -> dict:
-        cases = self.violations.head(max_cases).astype(object)
+    def to_dict(self, max_cases: int = 50, per_check: int = 5) -> dict:
+        # amostra estratificada por regra: todas as regras violadas aparecem no relatorio
+        cases = self.violations.groupby("check", sort=False).head(per_check).head(max_cases)
+        cases = cases.astype(object)
         cases = cases.where(pd.notna(cases), None)
         return {
             "passed": self.passed,
@@ -69,6 +71,19 @@ def _normalize_check(check: str) -> str:
     return check
 
 
+def _frame_violations(rows: pd.DataFrame, df: pd.DataFrame) -> pd.DataFrame:
+    out = rows.copy()
+    for i, r in out.iterrows():
+        cols = FRAME_CHECK_COLUMNS.get(r["check"])
+        if not cols or r["row_index"] not in df.index:
+            out.at[i, "column"] = None
+            continue
+        values = df.loc[r["row_index"], cols]
+        out.at[i, "column"] = ",".join(cols)
+        out.at[i, "failure_case"] = ", ".join(f"{c}={_jsonable(values[c])}" for c in cols)
+    return out
+
+
 def validate_batch(
     df: pd.DataFrame, include_protected: bool = False, contract_params: dict | None = None
 ) -> ValidationResult:
@@ -99,9 +114,18 @@ def validate_batch(
                 "row_index": fc["index"],
             }
         )
-        # checagens no nivel do DataFrame sao reportadas uma vez por coluna: vira uma por linha
+        # checagens entre colunas sao reportadas uma vez por coluna: vira uma por linha, com as
+        # colunas envolvidas e seus valores reais como caso de falha
         frame_level = (fc["schema_context"] == "DataFrameSchema") & fc["index"].notna()
-        violations.loc[frame_level, "column"] = None
+        violations = pd.concat(
+            [
+                violations[~frame_level],
+                _frame_violations(
+                    violations[frame_level].drop_duplicates(["check", "row_index"]), df
+                ),
+            ],
+            ignore_index=True,
+        )
         violations = violations.drop_duplicates(subset=["check", "row_index", "column"])
         violations = violations.reset_index(drop=True)
         if violations["row_index"].isna().any():

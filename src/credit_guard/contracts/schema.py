@@ -8,6 +8,8 @@ chaves de relatorio e ancoras de runbook.
 
 from __future__ import annotations
 
+import numpy as np
+import pandas as pd
 import pandera.pandas as pa
 
 from credit_guard.config import (
@@ -64,69 +66,83 @@ REQUIRED_NUMERIC = {
 
 CHECK_NAMES = [
     "required_not_null",
+    "coerce_dtype",
     "age_between_18_100",
     "income_positive_max",
+    "amounts_positive_finite",
     "unique_client_id",
     *[f"domain_{c}" for c in [*DOMAINS, "REGION_RATING_CLIENT"]],
     "annuity_le_credit",
     "ext_source_unit_interval",
     "employment_sentinel_consistency",
     "days_employed_non_positive",
+    "days_id_publish_non_positive",
     "children_range",
     "fam_members_min",
 ]
+
+# colunas envolvidas nas regras entre colunas (aparecem no relatorio de violacoes)
+FRAME_CHECK_COLUMNS = {
+    "annuity_le_credit": ["AMT_ANNUITY", "AMT_CREDIT"],
+    "employment_sentinel_consistency": ["DAYS_EMPLOYED", "NAME_INCOME_TYPE"],
+}
+AMOUNT_COLUMNS = ["AMT_CREDIT", "AMT_ANNUITY", "AMT_GOODS_PRICE"]
+
+
+def _num(s: pd.Series) -> pd.Series:
+    """Visao numerica tolerante: celula nao numerica vira NaN (quem a reporta e o coerce_dtype),
+    para que uma celula invalida nao gere violacoes fantasmas em outras regras."""
+    return pd.to_numeric(s, errors="coerce")
+
+
+def _passes(mask: pd.Series, values: pd.Series) -> pd.Series:
+    return mask | values.isna()
 
 
 def _isin(values: list, name: str) -> pa.Check:
     return pa.Check(lambda s: s.isin(values), name=name)
 
 
+def _rule(fn, name: str) -> pa.Check:
+    return pa.Check(lambda s: _passes(fn(_num(s)), _num(s)), name=name)
+
+
 def _numeric_checks(col: str, c: dict) -> list[pa.Check]:
     if col == "DAYS_BIRTH":
         lo, hi = c["age_min"], c["age_max"]
-        return [
-            pa.Check(
-                lambda s: (-s / 365.25).between(lo, hi),
-                name="age_between_18_100",
-            )
-        ]
+        return [_rule(lambda v: (-v / 365.25).between(lo, hi), "age_between_18_100")]
     if col == "AMT_INCOME_TOTAL":
         mx = c["income_max"]
-        return [
-            pa.Check(
-                lambda s: (s > 0) & (s <= mx),
-                name="income_positive_max",
-            )
-        ]
+        return [_rule(lambda v: (v > 0) & (v <= mx), "income_positive_max")]
+    if col in AMOUNT_COLUMNS:
+        mx = c["amount_max"]
+        return [_rule(lambda v: (v > 0) & np.isfinite(v) & (v <= mx), "amounts_positive_finite")]
     if col.startswith("EXT_SOURCE_"):
-        return [pa.Check(lambda s: s.between(0, 1), name="ext_source_unit_interval")]
+        return [_rule(lambda v: v.between(0, 1), "ext_source_unit_interval")]
     if col == "DAYS_EMPLOYED":
         return [
-            pa.Check(
-                lambda s: (s <= 0) | (s == EMPLOYMENT_SENTINEL),
-                name="days_employed_non_positive",
-            )
+            _rule(lambda v: (v <= 0) | (v == EMPLOYMENT_SENTINEL), "days_employed_non_positive")
         ]
+    if col == "DAYS_ID_PUBLISH":
+        return [_rule(lambda v: v <= 0, "days_id_publish_non_positive")]
     if col == "CNT_CHILDREN":
         mx = c["children_max"]
-        return [pa.Check(lambda s: s.between(0, mx), name="children_range")]
+        return [_rule(lambda v: v.between(0, mx), "children_range")]
     if col == "CNT_FAM_MEMBERS":
-        return [pa.Check(lambda s: s >= 1, name="fam_members_min")]
+        return [_rule(lambda v: v >= 1, "fam_members_min")]
     if col == "REGION_RATING_CLIENT":
-        return [_isin([1, 2, 3], "domain_REGION_RATING_CLIENT")]
+        return [_rule(lambda v: v.isin([1, 2, 3]), "domain_REGION_RATING_CLIENT")]
     return []
 
 
 def _annuity_le_credit(df):
-    return (
-        (df["AMT_ANNUITY"] <= df["AMT_CREDIT"]) | df["AMT_ANNUITY"].isna() | df["AMT_CREDIT"].isna()
-    )
+    annuity, credit = _num(df["AMT_ANNUITY"]), _num(df["AMT_CREDIT"])
+    return (annuity <= credit) | annuity.isna() | credit.isna()
 
 
 def _sentinel_consistency(df):
-    return (df["DAYS_EMPLOYED"] != EMPLOYMENT_SENTINEL) | df["NAME_INCOME_TYPE"].isin(
-        SENTINEL_INCOME_TYPES
-    )
+    days = _num(df["DAYS_EMPLOYED"])
+    return (days != EMPLOYMENT_SENTINEL) | df["NAME_INCOME_TYPE"].isin(SENTINEL_INCOME_TYPES)
 
 
 def build_input_schema(

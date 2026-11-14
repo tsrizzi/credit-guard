@@ -6,6 +6,7 @@ contract:
   age_min: 18
   age_max: 100
   income_max: 5000000
+  amount_max: 50000000      # teto de credito, parcela e preco do bem (bruto max: 4,05 mi)
   children_max: 20
 model:
   n_estimators: 400
