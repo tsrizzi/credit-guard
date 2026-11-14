@@ -15,6 +15,7 @@ from credit_guard.logging_utils import get_logger
 from credit_guard.model.features import MODEL_FEATURES, base_feature_importance, build_pipeline
 from credit_guard.model.metrics import evaluate_scores
 from credit_guard.observability.pipeline import StageContext, track_stage
+from credit_guard.observability.tracking import mlflow_best_effort
 
 log = get_logger("train")
 
@@ -77,25 +78,28 @@ def _run(ctx: StageContext) -> None:
         out / "feature_importance.csv", index_label="feature"
     )
 
-    mlflow.set_tracking_uri(TRACKING_URI)
-    mlflow.set_experiment("credit-training")
-    with mlflow.start_run(run_name=f"baseline-{model_version}"):
-        mlflow.log_params(
-            {**model_params, "target_approval_rate": target_rate, "seed": params["seed"]}
-        )
-        mlflow.log_metrics({**metrics, "threshold": threshold})
-        mlflow.set_tags(
-            {"model_version": model_version, "dataset": "home-credit/application_train"}
-        )
-        sample = test.head(5).astype({c: float for c in test.select_dtypes("number").columns})
-        mlflow.sklearn.log_model(
-            pipe,
-            name="model",
-            serialization_format=mlflow.sklearn.SERIALIZATION_FORMAT_CLOUDPICKLE,
-            signature=infer_signature(sample, pipe.predict_proba(sample)[:, 1]),
-            registered_model_name="credit-scoring",
-        )
-        mlflow.log_artifact(str(out / "feature_importance.csv"))
+    def _track() -> None:
+        mlflow.set_tracking_uri(TRACKING_URI)
+        mlflow.set_experiment("credit-training")
+        with mlflow.start_run(run_name=f"baseline-{model_version}"):
+            mlflow.log_params(
+                {**model_params, "target_approval_rate": target_rate, "seed": params["seed"]}
+            )
+            mlflow.log_metrics({**metrics, "threshold": threshold})
+            mlflow.set_tags(
+                {"model_version": model_version, "dataset": "home-credit/application_train"}
+            )
+            sample = test.head(5).astype({c: float for c in test.select_dtypes("number").columns})
+            mlflow.sklearn.log_model(
+                pipe,
+                name="model",
+                serialization_format=mlflow.sklearn.SERIALIZATION_FORMAT_CLOUDPICKLE,
+                signature=infer_signature(sample, pipe.predict_proba(sample)[:, 1]),
+                registered_model_name="credit-scoring",
+            )
+            mlflow.log_artifact(str(out / "feature_importance.csv"))
+
+    mlflow_best_effort(_track, "log_training_run")
 
     log.info(
         "train_done", extra={"model_version": model_version, **metrics, "threshold": threshold}

@@ -9,6 +9,7 @@ import pandas as pd
 from evidently import BinaryClassification, DataDefinition, Dataset, Report
 from evidently.presets import ClassificationPreset, DataDriftPreset, DataSummaryPreset
 
+PSI_THRESHOLD = 0.2  # mesma faixa "significativo" de stats.psi_band
 _VALUE_DRIFT = re.compile(r"ValueDrift\(column=(?P<col>.+?),method=(?P<method>.+?),threshold=")
 
 
@@ -28,7 +29,10 @@ def build_drift_report(
 ) -> dict:
     columns = numeric + categorical
     classification = None
-    presets = [DataDriftPreset(columns=columns), DataSummaryPreset(columns=columns)]
+    presets = [
+        DataDriftPreset(columns=columns, method="psi", threshold=PSI_THRESHOLD),
+        DataSummaryPreset(columns=columns),
+    ]
     keep = list(columns)
     if target and prediction:
         classification = [

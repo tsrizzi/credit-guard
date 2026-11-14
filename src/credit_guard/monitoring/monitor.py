@@ -34,6 +34,7 @@ from credit_guard.monitoring.evidently_reports import build_drift_report
 from credit_guard.monitoring.fairness import disparate_impact, fairness_table
 from credit_guard.monitoring.stats import feature_drift_table
 from credit_guard.observability.pipeline import StageContext, track_stage
+from credit_guard.observability.tracking import mlflow_best_effort
 
 log = get_logger("monitor")
 
@@ -210,15 +211,22 @@ def _run(ctx: StageContext) -> None:
         json.dumps(ref_summary, indent=2), encoding="utf-8"
     )
 
-    mlflow.set_tracking_uri(TRACKING_URI)
-    mlflow.set_experiment("credit-monitoring")
+    def _setup():
+        mlflow.set_tracking_uri(TRACKING_URI)
+        mlflow.set_experiment("credit-monitoring")
+
+    tracking_ok = mlflow_best_effort(_setup, "set_experiment")
     rows, last = [], None
     for m in range(1, sim["n_months"] + 1):
         current = pd.read_parquet(DATA_DIR / "production" / f"month_{m:02d}.parquet")
         summary = monitor_month(
             m, current, reference, protected, model, meta, mon, out_dir, ref_summary
         )
-        _log_month_to_mlflow(mlflow, summary, meta, out_dir / f"month_{m:02d}")
+        if tracking_ok:
+            mlflow_best_effort(
+                lambda: _log_month_to_mlflow(mlflow, summary, meta, out_dir / f"month_{m:02d}"),
+                f"log_month_{m:02d}",
+            )
         ctx.add_rows("monitored", summary["n_rows"])
         top_psi = {r["feature"]: r["psi"] for r in summary["drift_table"]}
         rows.append(

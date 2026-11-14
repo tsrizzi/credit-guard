@@ -28,6 +28,19 @@ def _restore(ref: pd.Series, cur: pd.Series, rng: np.random.Generator) -> pd.Ser
     )
 
 
+def _restore_group(
+    reference: pd.DataFrame, current: pd.DataFrame, cols: list[str], rng: np.random.Generator
+) -> pd.DataFrame:
+    """Desfaz o drift de um grupo de colunas. So numericas: mapeamento por quantil de cada uma.
+    Com categoricas: reamostra LINHAS da referencia para o grupo inteiro, preservando
+    combinacoes coerentes (ex.: aposentado com o sentinela de emprego)."""
+    if all(_is_numeric(reference[c]) and _is_numeric(current[c]) for c in cols):
+        return pd.DataFrame({c: _restore(reference[c], current[c], rng) for c in cols})
+    idx = rng.integers(0, len(reference), size=len(current))
+    sampled = reference[cols].iloc[idx].to_numpy()
+    return pd.DataFrame(sampled, columns=cols, index=current.index).astype(reference[cols].dtypes)
+
+
 def drift_attribution(
     model,
     meta: dict,
@@ -50,8 +63,7 @@ def drift_attribution(
     rows = []
     for feat, cols in groups.items():
         restored = current.copy()
-        for col in cols:
-            restored[col] = _restore(reference[col], current[col], rng)
+        restored[cols] = _restore_group(reference, current, cols, rng)
         s = model.predict_proba(restored)[:, 1]
         delta = score_cur - s.mean()
         rows.append(
