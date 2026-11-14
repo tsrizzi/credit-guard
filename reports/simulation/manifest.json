@@ -30,8 +30,8 @@
       },
       "after": {
         "rows": 10000,
-        "mean_income": 163487.89313325,
-        "mean_credit": 632671.29891,
+        "mean_income": 163468.68605588938,
+        "mean_credit": 632193.3111265304,
         "unemployed_share": 0.0156,
         "mean_ext_source_2": 0.49641133543805827,
         "default_rate": 0.0805
@@ -55,8 +55,8 @@
       },
       "after": {
         "rows": 10000,
-        "mean_income": 158431.3232742,
-        "mean_credit": 656731.218825,
+        "mean_income": 158400.8463442498,
+        "mean_credit": 657095.2735570064,
         "unemployed_share": 0.0312,
         "mean_ext_source_2": 0.47604085680366354,
         "default_rate": 0.0781
@@ -80,8 +80,8 @@
       },
       "after": {
         "rows": 10000,
-        "mean_income": 153806.262246,
-        "mean_credit": 693471.3970725001,
+        "mean_income": 153783.1073884303,
+        "mean_credit": 693767.2555220746,
         "unemployed_share": 0.0456,
         "mean_ext_source_2": 0.4542797699536962,
         "default_rate": 0.0786
@@ -105,11 +105,11 @@
       },
       "after": {
         "rows": 10000,
-        "mean_income": 147867.74006399998,
-        "mean_credit": 715292.1567,
+        "mean_income": 147558.5151227721,
+        "mean_credit": 714261.1145086713,
         "unemployed_share": 0.0622,
         "mean_ext_source_2": 0.43427075989701736,
-        "default_rate": 0.09
+        "default_rate": 0.0888
       }
     },
     "05": {
@@ -130,11 +130,11 @@
       },
       "after": {
         "rows": 10000,
-        "mean_income": 143786.181258675,
-        "mean_credit": 750041.2209375,
+        "mean_income": 143794.7391655546,
+        "mean_credit": 750807.6946002075,
         "unemployed_share": 0.0773,
         "mean_ext_source_2": 0.4157065847573425,
-        "default_rate": 0.1034
+        "default_rate": 0.1043
       }
     },
     "06": {
@@ -155,11 +155,11 @@
       },
       "after": {
         "rows": 10000,
-        "mean_income": 137562.2131464,
-        "mean_credit": 783895.8102300001,
+        "mean_income": 137846.85485309467,
+        "mean_credit": 782572.6708661083,
         "unemployed_share": 0.0926,
         "mean_ext_source_2": 0.39558422480840016,
-        "default_rate": 0.1189
+        "default_rate": 0.1163
       }
     }
   },

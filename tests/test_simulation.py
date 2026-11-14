@@ -65,3 +65,21 @@ def test_dirty_batch_fails_with_each_defect():
     for defect, count in manifest.items():
         if defect != "real_quarantined" and count:
             assert DEFECT_CHECKS[defect] in checks, defect
+
+
+def test_income_psi_grows_gradually_with_tied_values():
+    """Rendas do Home Credit sao muito repetidas (multiplos de 4.500); o drift deve crescer aos poucos."""
+    from credit_guard.monitoring.stats import psi
+
+    df = _features(make_raw_like(n=5000, seed=8))
+    tied = [67_500, 90_000, 112_500, 135_000, 157_500, 180_000, 225_000, 270_000, 315_000]
+    df["AMT_INCOME_TOTAL"] = np.random.default_rng(9).choice(tied, size=len(df)).astype(float)
+    values = [
+        psi(
+            df["AMT_INCOME_TOTAL"],
+            apply_data_drift(df, m, SIM, np.random.default_rng(m))["AMT_INCOME_TOTAL"],
+        )
+        for m in range(1, 7)
+    ]
+    assert values[0] < 0.10, values
+    assert all(a <= b for a, b in zip(values, values[1:], strict=False)), values

@@ -89,3 +89,22 @@ def test_feature_drift_table_flags_only_shifted():
     flagged = set(table.loc[table["drift"], "feature"])
     assert flagged == {"x"}
     assert table.iloc[0]["feature"] == "x"
+
+
+def test_psi_robust_to_tied_values_on_bin_edges():
+    """Uma variacao minima (1%) em dados muito repetidos nao pode parecer drift significativo."""
+    tied = [67_500, 90_000, 112_500, 135_000, 157_500, 180_000, 225_000, 270_000, 315_000]
+    ref = pd.Series(np.random.default_rng(1).choice(tied, 5000).astype(float))
+    assert psi(ref, ref * 0.99) < 0.10
+    assert psi(ref, ref * 1.01) < 0.10
+    assert psi(ref, ref * 0.80) >= 0.20
+
+
+def test_psi_robust_to_mass_points_with_near_duplicates():
+    """Como no Home Credit: poucos valores concentram muita massa e ha valores distintos colados neles."""
+    rng = np.random.default_rng(2)
+    tied = rng.choice([90_000, 112_500, 135_000, 157_500, 180_000, 225_000], 4000).astype(float)
+    spread = rng.uniform(60_000, 300_000, 1000).round(-1)
+    ref = pd.Series(np.concatenate([tied, spread]))
+    assert psi(ref, ref * 0.99) < 0.10
+    assert psi(ref, ref * 0.80) >= 0.20

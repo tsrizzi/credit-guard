@@ -24,6 +24,30 @@ def _is_numeric(s: pd.Series) -> bool:
     return pd.api.types.is_numeric_dtype(s) and not pd.api.types.is_bool_dtype(s)
 
 
+MASS_POINT_SHARE = 0.01
+
+
+def _mass_aware_edges(edges: np.ndarray, ref_valid: np.ndarray) -> np.ndarray:
+    """Bordas de bin que nao caem em cima de pontos de massa.
+
+    Em dados muito repetidos (ex.: renda 135.000 para 12% dos clientes do Home Credit) a borda
+    de quantil coincide com o proprio valor repetido, e qualquer variacao minima move a massa
+    inteira para o bin vizinho, inflando o PSI. Cada borda que coincide com um valor que
+    concentra >= 1% da referencia e movida para o meio do caminho ate a borda anterior,
+    deixando o ponto de massa no interior do bin.
+    """
+    if not len(edges):
+        return edges
+    values, counts = np.unique(ref_valid, return_counts=True)
+    share = dict(zip(values, counts / counts.sum(), strict=True))
+    lower = [float(ref_valid.min()), *edges[:-1]]
+    out = [
+        (prev + e) / 2 if share.get(e, 0.0) >= MASS_POINT_SHARE else e
+        for e, prev in zip(edges, lower, strict=True)
+    ]
+    return np.unique(np.asarray(out, dtype=float))
+
+
 def _distributions(
     reference: pd.Series, current: pd.Series, bins: int
 ) -> tuple[np.ndarray, np.ndarray]:
@@ -33,7 +57,9 @@ def _distributions(
         edges = (
             np.unique(np.quantile(ref_valid, np.linspace(0, 1, bins + 1))) if len(ref_valid) else []
         )
-        inner = np.asarray(edges[1:-1]) if len(edges) > 2 else np.array([])
+        inner = _mass_aware_edges(
+            np.asarray(edges[1:-1]) if len(edges) > 2 else np.array([]), ref_valid
+        )
 
         def counts(s: pd.Series) -> np.ndarray:
             vals = s.to_numpy(dtype=float)

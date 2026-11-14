@@ -5,17 +5,6 @@
   "rejection_rate": 0.0,
   "drift_table": [
     {
-      "feature": "AMT_INCOME_TOTAL",
-      "kind": "numeric",
-      "psi": 0.4304136498098239,
-      "psi_band": "significant",
-      "ks_stat": 0.12062597346283926,
-      "ks_pvalue": 1.166827837913201e-104,
-      "js": 0.26627349769549713,
-      "chi2_pvalue": null,
-      "drift": true
-    },
-    {
       "feature": "NAME_INCOME_TYPE",
       "kind": "categorical",
       "psi": 0.18108686336210347,
@@ -24,6 +13,17 @@
       "ks_pvalue": null,
       "js": 0.126210585967046,
       "chi2_pvalue": 1.5648256485350337e-308,
+      "drift": false
+    },
+    {
+      "feature": "AMT_INCOME_TOTAL",
+      "kind": "numeric",
+      "psi": 0.12184303960938886,
+      "psi_band": "moderate",
+      "ks_stat": 0.12419386870176047,
+      "ks_pvalue": 6.152545770289073e-111,
+      "js": 0.14668582173822226,
+      "chi2_pvalue": null,
       "drift": false
     },
     {
@@ -40,33 +40,33 @@
     {
       "feature": "annuity_income_ratio",
       "kind": "numeric",
-      "psi": 0.09051325576998429,
+      "psi": 0.086516279704885,
       "psi_band": "stable",
-      "ks_stat": 0.12640249761512445,
-      "ks_pvalue": 6.454442276781752e-115,
-      "js": 0.12724426260767027,
+      "ks_stat": 0.12271609574191311,
+      "ks_pvalue": 2.581030475377411e-108,
+      "js": 0.12439734265819977,
+      "chi2_pvalue": null,
+      "drift": false
+    },
+    {
+      "feature": "AMT_GOODS_PRICE",
+      "kind": "numeric",
+      "psi": 0.05628211906933456,
+      "psi_band": "stable",
+      "ks_stat": 0.12362039412802567,
+      "ks_pvalue": 8.521263073006928e-110,
+      "js": 0.10036061939080954,
       "chi2_pvalue": null,
       "drift": false
     },
     {
       "feature": "credit_income_ratio",
       "kind": "numeric",
-      "psi": 0.056507955194848504,
+      "psi": 0.05249783792549524,
       "psi_band": "stable",
-      "ks_stat": 0.10096169456248377,
-      "ks_pvalue": 2.2273902463469872e-73,
-      "js": 0.1006778901898656,
-      "chi2_pvalue": null,
-      "drift": false
-    },
-    {
-      "feature": "credit_term",
-      "kind": "numeric",
-      "psi": 0.04925177389306307,
-      "psi_band": "stable",
-      "ks_stat": 0.041720848148469325,
-      "ks_pvalue": 7.240144981089669e-13,
-      "js": 0.0922896254023193,
+      "ks_stat": 0.09842455120978233,
+      "ks_pvalue": 9.450681398351509e-70,
+      "js": 0.09704339852325576,
       "chi2_pvalue": null,
       "drift": false
     },
@@ -82,57 +82,35 @@
       "drift": false
     },
     {
-      "feature": "AMT_ANNUITY",
-      "kind": "numeric",
-      "psi": 0.039283644260745806,
-      "psi_band": "stable",
-      "ks_stat": 0.08438543057844078,
-      "ks_pvalue": 2.3320349203288236e-51,
-      "js": 0.08404104214225752,
-      "chi2_pvalue": null,
-      "drift": false
-    },
-    {
       "feature": "AMT_CREDIT",
       "kind": "numeric",
-      "psi": 0.03574999650757669,
+      "psi": 0.04432441279431243,
       "psi_band": "stable",
-      "ks_stat": 0.07525567600381577,
-      "ks_pvalue": 6.359677895937257e-41,
-      "js": 0.0801123540155338,
+      "ks_stat": 0.07288777209261987,
+      "ks_pvalue": 2.0613329630465224e-38,
+      "js": 0.08918433452841296,
       "chi2_pvalue": null,
       "drift": false
     },
     {
-      "feature": "AMT_GOODS_PRICE",
+      "feature": "AMT_ANNUITY",
       "kind": "numeric",
-      "psi": 0.007310313305321157,
+      "psi": 0.034695817120688824,
       "psi_band": "stable",
-      "ks_stat": 0.1631363509910171,
-      "ks_pvalue": 2.2883239785424735e-191,
-      "js": 0.03629434362955032,
+      "ks_stat": 0.08344206920475244,
+      "ks_pvalue": 3.1743044619193584e-50,
+      "js": 0.07897784287703029,
       "chi2_pvalue": null,
       "drift": false
     },
     {
       "feature": "years_employed",
       "kind": "numeric",
-      "psi": 0.006385786550298529,
+      "psi": 0.006455768432774394,
       "psi_band": "stable",
-      "ks_stat": 0.0068632753021812265,
-      "ks_pvalue": 0.9150859204155621,
-      "js": 0.033922462656434754,
-      "chi2_pvalue": null,
-      "drift": false
-    },
-    {
-      "feature": "goods_credit_ratio",
-      "kind": "numeric",
-      "psi": 0.0019321740053891087,
-      "psi_band": "stable",
-      "ks_stat": 0.03212212486542698,
-      "ks_pvalue": 8.570952532022999e-08,
-      "js": 0.0186626475383037,
+      "ks_stat": 0.006736996731654621,
+      "ks_pvalue": 0.9255219719529804,
+      "js": 0.03410798054778664,
       "chi2_pvalue": null,
       "drift": false
     },
@@ -155,6 +133,28 @@
       "ks_stat": 0.012187381840256695,
       "ks_pvalue": 0.1725768861857475,
       "js": 0.01607345366152103,
+      "chi2_pvalue": null,
+      "drift": false
+    },
+    {
+      "feature": "credit_term",
+      "kind": "numeric",
+      "psi": 0.0011298547625503636,
+      "psi_band": "stable",
+      "ks_stat": 0.01432084814846929,
+      "ks_pvalue": 0.06806397335827108,
+      "js": 0.014273626202759819,
+      "chi2_pvalue": null,
+      "drift": false
+    },
+    {
+      "feature": "goods_credit_ratio",
+      "kind": "numeric",
+      "psi": 0.0007943815232981939,
+      "psi_band": "stable",
+      "ks_stat": 0.021610562146436085,
+      "ks_pvalue": 0.000921668146027496,
+      "js": 0.01196829462631559,
       "chi2_pvalue": null,
       "drift": false
     },
@@ -269,10 +269,8 @@
       "drift": false
     }
   ],
-  "share_drifted": 0.041666666666666664,
-  "drifted_features": [
-    "AMT_INCOME_TOTAL"
-  ],
+  "share_drifted": 0.0,
+  "drifted_features": [],
   "evidently": {
     "drifted_features": [
       "AMT_CREDIT",
@@ -287,77 +285,77 @@
     "share_drifted": 0.3333333333333333,
     "n_features": 24
   },
-  "auc": 0.7742645560669879,
-  "ks": 0.4184831498829381,
-  "approval_rate": 0.7567,
-  "default_rate_approved": 0.04004228888595216,
+  "auc": 0.7735203934312023,
+  "ks": 0.41845176116407146,
+  "approval_rate": 0.7577,
+  "default_rate_approved": 0.0402533984426554,
   "default_rate": 0.0781,
-  "mean_score": 0.09287019073963165,
+  "mean_score": 0.09275088459253311,
   "fairness": [
     {
       "attribute": "CODE_GENDER",
       "group": "F",
       "n": 6510,
-      "approval_rate": 0.784331797235023,
+      "approval_rate": 0.7869431643625192,
       "default_rate": 0.06589861751152074,
-      "tpr": 0.8092419010031244
+      "tpr": 0.8115441539220523
     },
     {
       "attribute": "CODE_GENDER",
       "group": "M",
       "n": 3490,
-      "approval_rate": 0.7051575931232091,
+      "approval_rate": 0.7031518624641834,
       "default_rate": 0.1008595988538682,
-      "tpr": 0.7466539196940727
+      "tpr": 0.7447418738049714
     },
     {
       "attribute": "age_band",
       "group": "25-34",
       "n": 2385,
-      "approval_rate": 0.640251572327044,
+      "approval_rate": 0.6419287211740042,
       "default_rate": 0.10733752620545073,
-      "tpr": 0.6829497416627525
+      "tpr": 0.6838891498356036
     },
     {
       "attribute": "age_band",
       "group": "35-44",
       "n": 2768,
-      "approval_rate": 0.7528901734104047,
+      "approval_rate": 0.7539739884393064,
       "default_rate": 0.07695086705202313,
-      "tpr": 0.7831702544031311
+      "tpr": 0.7847358121330724
     },
     {
       "attribute": "age_band",
       "group": "45-54",
       "n": 2242,
-      "approval_rate": 0.7992863514719001,
+      "approval_rate": 0.8024085637823372,
       "default_rate": 0.07270294380017842,
-      "tpr": 0.8287638287638288
+      "tpr": 0.8306878306878307
     },
     {
       "attribute": "age_band",
       "group": "55+",
       "n": 2193,
-      "approval_rate": 0.8919288645690835,
+      "approval_rate": 0.8905608755129959,
       "default_rate": 0.04240766073871409,
-      "tpr": 0.9014285714285715
+      "tpr": 0.9004761904761904
     },
     {
       "attribute": "age_band",
       "group": "<25",
       "n": 412,
-      "approval_rate": 0.5048543689320388,
+      "approval_rate": 0.5024271844660194,
       "default_rate": 0.13592233009708737,
       "tpr": 0.5421348314606742
     }
   ],
-  "di_gender": 0.8990552156741268,
-  "di_age": 0.5660253737566263,
+  "di_gender": 0.893523057708732,
+  "di_age": 0.5641693883942552,
   "alerts": [
     {
       "name": "FairnessDisparateImpact",
       "severity": "warning",
-      "value": 0.5660253737566263,
+      "value": 0.5641693883942552,
       "threshold": 0.8,
       "message": "disparate impact < 0,8 e piorando vs. referencia (faixa etaria)",
       "runbook": "README.md#runbook-fairness-disparate-impact"

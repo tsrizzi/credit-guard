@@ -26,10 +26,14 @@ def apply_data_drift(
     df: pd.DataFrame, month: int, sim: dict, rng: np.random.Generator
 ) -> pd.DataFrame:
     out = df.copy()
-    out[PRICE_COLUMNS] = out[PRICE_COLUMNS] * (1 + sim["price_inflation_per_month"] * month)
-    out["AMT_INCOME_TOTAL"] = out["AMT_INCOME_TOTAL"] * (
-        1 - sim["real_income_erosion_per_month"] * month
-    )
+    n = len(out)
+    # choque heterogeneo por cliente: cada um sofre uma fracao aleatoria U(0, 2) do choque
+    # medio do mes (media = r*m). Um choque identico para todos moveria em bloco os valores
+    # muito repetidos do Home Credit (ex.: renda 135.000) e faria o PSI saltar artificialmente.
+    price_mult = 1 + sim["price_inflation_per_month"] * month * rng.uniform(0, 2, n)
+    out[PRICE_COLUMNS] = out[PRICE_COLUMNS].mul(price_mult, axis=0)
+    income_mult = 1 - sim["real_income_erosion_per_month"] * month * rng.uniform(0, 2, n)
+    out["AMT_INCOME_TOTAL"] = out["AMT_INCOME_TOTAL"] * income_mult
 
     working = out.index[out["NAME_INCOME_TYPE"] == "Working"]
     n_shift = round(sim["unemployment_shift_per_month"] * month * len(working))
