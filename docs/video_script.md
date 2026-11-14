@@ -36,13 +36,14 @@ e `reports/validation/dirty_batch.html` abertos no navegador · Pushgateway limp
    - README seção 9: pseudonimização, gênero fora do modelo, base legal art. 7º X e art. 20, retenção.
 
 ## R — Result (3:15–4:50)
-- **Evidently** (`reference_vs_month_06.html`): 9 de 24 features em drift; `EXT_SOURCE_2` PSI 1,38.
+- **Evidently** (`reference_vs_month_06.html`, PSI ≥ 0,20): 7 de 24 features em drift; nos testes
+  próprios, `EXT_SOURCE_2` chega a PSI 1,38 (tabela no README).
 - **Prometheus /alerts**: `FeatureDriftCritical`, `ModelAucDrop`, `ApprovalRateShift`,
   `DriftedShareHigh`, `FairnessDisparateImpact` disparando, cada um com runbook.
 - **MLflow** (`credit-monitoring`): gráfico de AUC por mês (0,764 → 0,672) e PSI por feature.
 - **Análise causal**: a piora de bureau explica 90% do deslocamento de score; os choques de
-  capacidade de pagamento quase não movem o modelo → retreinar com a janela recente e regra
-  temporária para autônomos.
+  capacidade de pagamento quase não movem o modelo; a alta da inadimplência vem do concept drift
+  nos autônomos → retreinar com a janela recente e regra temporária para autônomos.
 - **Viés**: o DI por idade já era 0,649 na referência e caiu para 0,486 na crise → plano de
   mitigação levado ao comitê/DPO.
 - **Lições** (15 s): "sem erro não é saudável"; conhecer o dado antes da regra; concept drift não

@@ -1,4 +1,4 @@
-# Model Card — `credit-scoring` v1 (model_version `bac543d9df`)
+# Model Card — `credit-scoring` v1 (model_version `d616328c08`)
 
 ## Uso pretendido
 - **Tarefa:** estimar a probabilidade de inadimplência (PD) de um solicitante de crédito pessoa física.
@@ -32,7 +32,8 @@
 
 ## Limitações conhecidas
 - Sensível a drift nos scores de bureau (`EXT_SOURCE_2/3`): eles explicam ~90% do deslocamento de
-  score numa crise simulada; choques de capacidade de pagamento quase não movem o score.
+  score numa crise simulada; choques de capacidade de pagamento (renda, inflação, desemprego) quase
+  não movem o score, ou seja, o modelo pouco usa comprometimento de renda.
 - Degrada sob concept drift (−9,2 p.p. de AUC no 6º mês simulado). Monitorado mensalmente com alertas.
 - Treinado com dados de outra população (Home Credit); o uso real exigiria revalidação local.
 

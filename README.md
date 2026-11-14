@@ -142,7 +142,7 @@ uv run mlflow ui --backend-store-uri sqlite:///mlflow.db --port 5000
 e suba com `docker compose --profile datadog up -d`. As mesmas métricas passam a ser espelhadas via
 DogStatsD. Sem a chave, nada muda: o Datadog nunca é dependência.
 
-**Testes:** `uv run pytest` (82 testes, dados 100% sintéticos, sem depender do dataset) ·
+**Testes:** `uv run pytest` (100 testes, dados 100% sintéticos, sem depender do dataset) ·
 **Lint:** `uv run ruff check .` · A CI (GitHub Actions) roda lint → testes com cobertura → build da imagem.
 
 ---
@@ -154,18 +154,21 @@ em **Pandera** e aplicado no formato de entrada, em todos os pontos de ingestão
 *lazy* (coleta todas as violações) e *fail-fast* no efeito: qualquer violação **bloqueia o lote**
 (exit code 1 no batch, HTTP 422 na API) e gera relatório JSON + HTML.
 
-### Regras (17 checagens rígidas, bem acima das 3 exigidas)
+### Regras (19 checagens rígidas, bem acima das 3 exigidas)
 
 | Regra (nome estável) | Dimensão de qualidade | O que garante |
 |---|---|---|
 | `required_not_null` | Completude | renda, crédito, parcela, idade, emprego, nº de membros e categóricas nunca nulos |
 | `age_between_18_100` | Validade | idade (de `DAYS_BIRTH`) entre 18 e 100 anos |
+| `coerce_dtype` | Validade (tipo) | cada campo numérico é de fato numérico; uma célula inválida reprova só a sua linha |
 | `income_positive_max` | Validade | 0 < renda ≤ 5.000.000 |
+| `amounts_positive_finite` | Validade | crédito, parcela e preço do bem > 0, finitos e ≤ 50.000.000 (barra negativos e `Infinity`) |
 | `unique_client_id` | Unicidade | sem clientes duplicados no lote |
 | `domain_<coluna>` (7 colunas) | Validade | categorias dentro do domínio conhecido (tipo de contrato, renda, escolaridade, estado civil, carro, imóvel, rating da região) |
 | `annuity_le_credit` | Consistência | parcela ≤ valor do crédito |
 | `ext_source_unit_interval` | Validade | scores de bureau `EXT_SOURCE_*` em [0, 1] |
 | `days_employed_non_positive` | Validade | dias de emprego ≤ 0 (ou o sentinela) |
+| `days_id_publish_non_positive` | Validade | data do documento no passado (dias ≤ 0) |
 | `employment_sentinel_consistency` | Consistência | `DAYS_EMPLOYED = 365243` **só** para aposentados/desempregados |
 | `children_range`, `fam_members_min` | Validade | 0–20 filhos; ≥ 1 membro na família |
 | `domain_CODE_GENDER` (ingestão batch) | Validade | gênero ∈ {F, M} — só no contrato batch; a API nunca recebe gênero |
@@ -186,7 +189,9 @@ empregado". O contrato aceita o sentinela nesses casos e o rejeita em qualquer o
 
 O lote sujo mistura **19 linhas de sujeira real** do Home Credit (da quarentena) com 7 tipos de
 defeito injetado (renda nula, menor de idade, parcela > crédito, `Working` com sentinela, tipo de
-contrato `Leasing`, `EXT_SOURCE_3 = 1,7`, IDs duplicados). Relatórios:
+contrato `Leasing`, `EXT_SOURCE_3 = 1,7`, IDs duplicados). O relatório mostra até 5 casos **de cada
+regra** e, nas regras entre colunas, as colunas e os valores reais envolvidos
+(ex.: `AMT_ANNUITY=1333287.0, AMT_CREDIT=888858.0`). Relatórios:
 [`dirty_batch.html`](reports/validation/dirty_batch.html) ·
 [`reference_raw.html`](reports/validation/reference_raw.html) ·
 [`month_01.html`](reports/validation/month_01.html).
@@ -252,9 +257,12 @@ separada para auditoria de fairness. Ver [seção 9](#9-etapa-4--governança-e-l
 | 5 | +25% | −15% | 15% | −0,10 | 10% | 10,4% |
 | 6 | +30% | −18% | 18% | −0,12 | 15% | 11,6% |
 
-- **Data drift (covariate shift)** em 4 grupos de variáveis importantes: inflação, erosão da renda
-  real, desemprego e piora de bureau. O choque é **heterogêneo por cliente** (cada um sofre uma
-  fração aleatória do choque médio), como na economia real.
+- **Data drift** em 4 grupos de variáveis importantes: inflação, erosão da renda real, desemprego e
+  piora de bureau, alterando artificialmente as features de cada cliente, como pede o enunciado. O
+  choque é **heterogêneo por cliente** (cada um sofre uma fração aleatória do choque médio).
+  **Honestidade metodológica:** como o rótulo de cada cliente é mantido, esses choques não são
+  covariate shift "puro" — os clientes passam a *parecer* mais arriscados sem inadimplir mais, o que
+  também desloca P(Y|X). Por isso a inadimplência real fica estável nos meses 1–3 (~8%).
 - **Concept drift:** a partir do mês 4, clientes `Commercial associate` (autônomos, os mais expostos
   à crise) passam a inadimplir mais **com as mesmas features**: muda P(inadimplência | X), não X.
   Só é detectável quando os rótulos chegam (rótulos atrasados), pela queda de performance.
@@ -266,8 +274,9 @@ Para cada mês, o estágio `monitor` compara produção × referência com **tes
 
 - **PSI** por feature (faixas da indústria de crédito: < 0,10 estável · 0,10–0,20 investigar ·
   ≥ 0,20 retreinar), **KS** (p-valor < 0,05), **Jensen-Shannon** e **Qui-quadrado** para categóricas;
-- **Evidently** `DataDriftPreset` + `DataSummaryPreset` por mês e, no relatório final,
-  `ClassificationPreset` (performance com rótulos);
+- **Evidently** `DataDriftPreset(method="psi", threshold=0.2)` (o mesmo PSI e a mesma faixa
+  "significativo") + `DataSummaryPreset` por mês e, no relatório final, `ClassificationPreset`
+  (performance com rótulos);
 - **performance** (AUC, KS, taxa de aprovação) e **fairness** por mês; cada mês vira um run no MLflow.
 
 > **PSI robusto a pontos de massa.** A renda do Home Credit é muito repetida (135.000 = 12% dos
@@ -298,16 +307,20 @@ PSI das variáveis mais afetadas:
 | `credit_income_ratio` | 0,02 | 0,12 | **0,44** |
 | `AMT_INCOME_TOTAL` | 0,14 | 0,13 | **0,28** |
 
-O Evidently confirma, no mês 6, **9 das 24 features em drift** (37,5%): `AMT_INCOME_TOTAL`,
-`AMT_CREDIT`, `AMT_ANNUITY`, `AMT_GOODS_PRICE`, `EXT_SOURCE_2`, `EXT_SOURCE_3`,
-`credit_income_ratio`, `annuity_income_ratio`, `NAME_INCOME_TYPE`
+O Evidently (PSI, limiar 0,20) aponta no mês 6 **7 das 24 features em drift** (29%):
+`AMT_ANNUITY`, `AMT_GOODS_PRICE`, `EXT_SOURCE_2`, `EXT_SOURCE_3`, `credit_income_ratio`,
+`annuity_income_ratio`, `NAME_INCOME_TYPE`. Os testes próprios apontam as mesmas 7 e mais
+`AMT_INCOME_TOTAL` (0,28) e `AMT_CREDIT` (0,22), que estão na fronteira: o PSI do Evidently não trata
+os pontos de massa da renda, e a diferença de binning muda o veredito só nesses casos
 ([relatório completo](reports/drift/reference_vs_month_06.html) · relatórios mensais em
 `reports/monitoring/month_XX/drift_report.html`).
 
-**Leitura:** o data drift aparece cedo (mês 3) e já tira 1,6 p.p. de AUC; quando o concept drift
-entra (mês 4), a AUC despenca 4,1 p.p. abaixo da referência e o alerta crítico dispara. No mês 6 o
-modelo perdeu **9,2 p.p. de AUC** e a inadimplência real subiu de 8,1% para 11,6% — exatamente a
-degradação silenciosa que a diretoria suspeitava: nenhuma requisição falhou.
+**Leitura:** o data drift aparece cedo (mês 3): os clientes parecem mais arriscados, a aprovação cai
+de 80% para 72,6% e a AUC perde 1,6 p.p. — **sem a inadimplência real subir** (7,9%). O modelo passa
+a recusar bons pagadores. Quando o concept drift entra (mês 4), a AUC fica 4,1 p.p. abaixo da
+referência e o alerta crítico dispara. No mês 6 o modelo perdeu **9,2 p.p. de AUC** e a inadimplência
+subiu de 8,1% para 11,6% (efeito do concept drift nos autônomos) — exatamente a degradação
+silenciosa que a diretoria suspeitava: nenhuma requisição falhou.
 
 ---
 
@@ -333,7 +346,8 @@ saúde operacional → saúde do modelo → drift, com um seletor de mês.
 |---|---|---|---|---|
 | `credit_requests_total{path,status_code}` | counter | volume e taxa de erro da API | — | — |
 | `credit_request_latency_seconds` | histogram | latência do `/predict` | **p95 < 500 ms** (medido: ~93 ms) | `ApiLatencyHigh` |
-| `credit_contract_rejections_total{check}` | counter | linhas barradas pelo contrato, por regra | **< 1% das linhas** | `ContractRejectionHigh` |
+| `credit_rows_rejected_total` | counter | linhas recebidas em lotes bloqueados pelo contrato | **< 1% das linhas** | `ContractRejectionHigh` |
+| `credit_contract_rejections_total{check}` | counter | violações do contrato por regra (diagnóstico) | — | — |
 | `credit_rows_scored_total` | counter | volume de dados processados | — | — |
 | `credit_predictions_total{decision}` / `credit_score` | counter / histogram | decisões e distribuição do score servido | — | — |
 | `credit_pipeline_stage_status{stage}` | gauge | status do estágio (1 ok, 0 falhou) | 100% de sucesso | `PipelineStageFailed` |
@@ -421,7 +435,7 @@ O arquivo bruto tem 122 colunas; **o pipeline lê apenas 22** (minimização, LG
 
 | Campo | Categoria | Tratamento |
 |---|---|---|
-| `SK_ID_CURR` | identificador direto | **pseudonimizado** no primeiro estágio: `client_id = sha256(salt + id)[:16]`; o ID original nunca sai do `prepare` |
+| `SK_ID_CURR` | identificador direto | **pseudonimizado** no primeiro estágio: `client_id = HMAC-SHA256(chave, id)[:16]`; o ID original nunca sai do `prepare` |
 | `CODE_GENDER` | dado pessoal protegido (não discriminação) | **fora do modelo e da API**; guardado em tabela separada (`data/protected/`) só para auditoria de fairness |
 | `DAYS_BIRTH` (idade) | dado pessoal | feature do modelo (justificada na seção 5); faixa etária derivada só para auditoria |
 | renda, crédito, parcela, preço do bem | dado pessoal financeiro | usado no modelo; nunca escrito em logs |
@@ -431,7 +445,12 @@ O arquivo bruto tem 122 colunas; **o pipeline lê apenas 22** (minimização, LG
 
 Nenhum dado pessoal sensível do art. 5º, II (origem racial, saúde, religião, biometria etc.) é
 tratado. **Controles técnicos:** dados brutos e derivados nunca vão para o git (DVC + `.gitignore`);
-o salt da pseudonimização vem de variável de ambiente (em produção, de um cofre de segredos); logs e
+a chave HMAC da pseudonimização vem da variável `ID_SALT` (em produção, de um cofre de segredos).
+**Atenção:** sem `ID_SALT`, o pipeline usa uma chave **pública** de desenvolvimento e registra o
+aviso `public_dev_pseudonymization_key`. Como os IDs do Home Credit são sequenciais, os pseudônimos
+publicados neste repositório são **reversíveis e apenas ilustrativos**; só com chave secreta eles
+protegem de fato. A API só aceita `client_id` no formato pseudonimizado (16 hex), nunca CPF ou ID
+em claro. Logs e
 o log de predições registram só o `client_id` pseudonimizado, a decisão e o score — **nenhum valor
 de feature**; a API recusa (`422`) qualquer campo fora do contrato, inclusive atributos protegidos.
 
@@ -486,7 +505,7 @@ ressalvadas as obrigações legais de guarda.
 
 | Risco | Probabilidade × impacto | Mitigação implementada |
 |---|---|---|
-| Reidentificação a partir dos dados de treino | baixa × alto | pseudonimização com salt, minimização, dados fora do git |
+| Reidentificação a partir dos dados de treino | **alta na demo** (chave pública) / baixa em produção × alto | HMAC com chave secreta em cofre, minimização, dados fora do git, acesso restrito ao remote |
 | Discriminação por gênero/idade na decisão | média × alto | gênero fora do modelo; auditoria de DI por gênero e faixa etária todo mês; alerta de piora |
 | Decisões erradas por degradação silenciosa | alta × alto | contrato + monitoramento de drift + alertas com runbooks |
 | Vazamento por logs/observabilidade | média × médio | logs sem valores de feature; métricas agregadas; Datadog opcional sem PII |
@@ -530,17 +549,19 @@ flowchart LR
     PRECOS --> COMP[Comprometimento de renda ↑<br/>parcela/renda, crédito/renda]
     RENDA --> COMP
     DESEMP --> COMP
-    COMP --> INAD[Inadimplência ↑]
+    COMP -. hipótese do mundo real<br/>não simulada .-> INAD[Inadimplência ↑]
     BUREAU --> SCORE[Score do modelo ↑]
     COMP --> SCORE
     CHOQUE -. concept drift .-> SEG[Autônomos inadimplem mais<br/>com o mesmo perfil] --> INAD
     SCORE --> APROV[Aprovação ↓]
 ```
 
-**O que é covariate shift e o que é concept drift.** Os quatro choques mudam as **features** (X):
-são detectados pelo PSI/Evidently já no mês 3, sem precisar de rótulos. O efeito sobre os
-autônomos muda a **relação** X → inadimplência: as features desse grupo não mudam, então nenhum
-teste de distribuição o vê; ele aparece só na queda da AUC quando os rótulos chegam (mês 4+).
+**O que é data drift e o que é concept drift.** Os quatro choques mudam as **features** (X): são
+detectados pelo PSI/Evidently já no mês 3, sem precisar de rótulos. Como os rótulos são mantidos,
+eles não elevam a inadimplência — o caminho "comprometimento de renda → inadimplência" é a hipótese
+do mundo real, **não** um mecanismo da simulação (linha tracejada). O efeito sobre os autônomos muda
+a **relação** X → inadimplência sem mudar X: nenhum teste de distribuição o vê; ele aparece só na
+queda da AUC quando os rótulos chegam (mês 4+) e é a **única** fonte da alta de 8,1% para 11,6%.
 
 **Atribuição empírica (intervenção).** Para cada choque do grafo, desfazemos o choque inteiro nos
 dados do mês 6 (cada variável recebe o valor da referência no mesmo quantil, mantendo o resto
@@ -551,19 +572,22 @@ igual), re-pontuamos e medimos quanto do aumento do score médio some
 |---|---:|---:|
 | Piora de bureau (`EXT_SOURCE_2/3`) | **90,3%** | +16,1 p.p. |
 | Inflação (crédito, parcela, preço do bem) | 8,5% | +1,2 p.p. |
-| Desemprego (tipo de renda + emprego) | 7,3% | +1,4 p.p. |
 | Erosão da renda real | 4,6% | +0,7 p.p. |
+| Desemprego (tipo de renda + emprego) | −0,3% | −0,5 p.p. |
 
-(As parcelas somam ~111% por interação entre os choques.) A intervenção é feita **por choque, não
-por variável**: desfazer só o preço do bem, mantendo o crédito inflacionado, cria clientes
+(As parcelas somam ~98%; o resto é interação entre os choques.) A intervenção é feita **por choque,
+não por variável**, e grupos com categóricas são restaurados com **linhas reais** da referência
+(um `Working` nunca recebe o sentinela de aposentado): desfazer só o preço do bem, mantendo o crédito inflacionado, cria clientes
 incoerentes — essa versão ingênua atribui −88% ao preço do bem
 ([`attribution_month_06.md`](reports/causal/attribution_month_06.md)), um artefato que a
 intervenção conjunta elimina.
 
-**Conclusão prescritiva.** O score do modelo reage quase só à piora de bureau; os choques de
-**capacidade de pagamento** (renda, inflação, desemprego) quase não movem o score, embora sejam os
-que elevam a inadimplência real. Somado ao concept drift nos autônomos, isso explica a perda de
-9,2 p.p. de AUC. Ações: (1) **retreinar** com a janela recente (meses 4–6, rótulos já disponíveis),
+**Conclusão prescritiva.** O score do modelo reage quase só à piora de bureau (90%); os choques de
+**capacidade de pagamento** (renda, inflação, desemprego) quase não movem o score — o modelo não
+aprendeu a usar comprometimento de renda, justamente o canal pelo qual uma crise real eleva a
+inadimplência. Na simulação, a perda de 9,2 p.p. de AUC tem duas causas: (a) features piores em
+clientes que continuam pagando (o modelo recusa bons pagadores) e (b) o concept drift nos autônomos
+(o modelo aprova maus pagadores que parecem seguros). Ações: (1) **retreinar** com a janela recente (meses 4–6, rótulos já disponíveis),
 reforçando as razões de comprometimento de renda; (2) até lá, **regra de negócio temporária** para
 autônomos (limite de comprometimento de renda ou revisão manual); (3) **recalibrar o threshold**
 para a meta de inadimplência dos aprovados, não para a taxa de aprovação; (4) incluir indicadores
@@ -585,6 +609,8 @@ macro (inflação, desemprego) como contexto do monitoramento para antecipar o p
 - **Fairness também deriva.** O viés etário existia na referência e piorou com a crise; o alerta
   compara com a referência para não virar ruído.
 - **Causalidade exige intervir no nó certo.** Variáveis que se movem juntas devem ser desfeitas juntas.
+- **Simulação também tem viés.** Alterar features mantendo os rótulos não é covariate shift puro;
+  declarar isso evita tirar do experimento uma conclusão que ele não sustenta.
 
 ---
 
