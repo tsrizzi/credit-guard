@@ -33,3 +33,21 @@ def test_drift_attribution_identifies_driver():
     assert top["share_of_score_shift"] > 0.8
     assert top["delta_approval"] > 0
     assert abs(table.set_index("feature").loc["b", "share_of_score_shift"]) < 0.05
+
+
+def test_drift_attribution_by_causal_groups():
+    rng = np.random.default_rng(4)
+    n = 3000
+    base = rng.normal(0, 1, n)
+    ref = pd.DataFrame(
+        {"a": base, "b": base + rng.normal(0, 0.1, n), "c": rng.choice(["x", "y"], n)}
+    )
+    shifted = base + 1.5
+    cur = pd.DataFrame(
+        {"a": shifted, "b": shifted + rng.normal(0, 0.1, n), "c": rng.choice(["x", "y"], n)}
+    )
+    groups = {"choque_ab": ["a", "b"], "categoria": ["c"]}
+    table = drift_attribution(SigmoidOfA(), {"threshold": 0.5}, ref, cur, groups)
+    assert table.iloc[0]["feature"] == "choque_ab"
+    assert table.iloc[0]["share_of_score_shift"] > 0.8
+    assert set(table["feature"]) == {"choque_ab", "categoria"}

@@ -36,6 +36,15 @@ from credit_guard.monitoring.stats import feature_drift_table
 from credit_guard.observability.pipeline import StageContext, track_stage
 
 log = get_logger("monitor")
+
+# Nos de choque do grafo causal: a intervencao desfaz o choque inteiro de uma vez,
+# preservando a coerencia entre variaveis que se movem juntas (ex.: credito e preco do bem).
+CAUSAL_SHOCKS = {
+    "inflacao (credito, parcela, preco do bem)": ["AMT_CREDIT", "AMT_ANNUITY", "AMT_GOODS_PRICE"],
+    "erosao da renda real": ["AMT_INCOME_TOTAL"],
+    "desemprego (tipo de renda + emprego)": ["NAME_INCOME_TYPE", "DAYS_EMPLOYED"],
+    "piora de bureau (EXT_SOURCE_2/3)": ["EXT_SOURCE_2", "EXT_SOURCE_3"],
+}
 TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI", f"sqlite:///{(ROOT / 'mlflow.db').as_posix()}")
 
 
@@ -253,14 +262,18 @@ def _run(ctx: StageContext) -> None:
         prediction="probability_default",
     )
 
-    causal = drift_attribution(model, meta, reference, last, INPUT_COLUMNS, seed=params["seed"])
     causal_dir = REPORTS_DIR / "causal"
     causal_dir.mkdir(parents=True, exist_ok=True)
-    name = f"attribution_month_{sim['n_months']:02d}"
-    causal.to_csv(causal_dir / f"{name}.csv", index=False)
-    (causal_dir / f"{name}.md").write_text(
-        causal.round(4).to_markdown(index=False), encoding="utf-8"
-    )
+    month_tag = f"month_{sim['n_months']:02d}"
+    for name, spec in (
+        (f"attribution_{month_tag}", INPUT_COLUMNS),
+        (f"attribution_shocks_{month_tag}", CAUSAL_SHOCKS),
+    ):
+        causal = drift_attribution(model, meta, reference, last, spec, seed=params["seed"])
+        causal.to_csv(causal_dir / f"{name}.csv", index=False)
+        (causal_dir / f"{name}.md").write_text(
+            causal.round(4).to_markdown(index=False), encoding="utf-8"
+        )
 
 
 def main() -> None:

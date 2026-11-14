@@ -33,9 +33,12 @@ def drift_attribution(
     meta: dict,
     reference: pd.DataFrame,
     current: pd.DataFrame,
-    features: list[str],
+    features: list[str] | dict[str, list[str]],
     seed: int = 42,
 ) -> pd.DataFrame:
+    """`features` pode ser uma lista (intervencao por feature) ou um dict nome -> colunas
+    (intervencao conjunta no choque de origem, ex.: todos os precos inflacionados juntos)."""
+    groups = features if isinstance(features, dict) else {f: [f] for f in features}
     rng = np.random.default_rng(seed)
     threshold = meta["threshold"]
     score_ref = model.predict_proba(reference)[:, 1].mean()
@@ -45,9 +48,10 @@ def drift_attribution(
     total_shift = score_cur - score_ref
 
     rows = []
-    for feat in features:
+    for feat, cols in groups.items():
         restored = current.copy()
-        restored[feat] = _restore(reference[feat], current[feat], rng)
+        for col in cols:
+            restored[col] = _restore(reference[col], current[col], rng)
         s = model.predict_proba(restored)[:, 1]
         delta = score_cur - s.mean()
         rows.append(

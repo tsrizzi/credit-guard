@@ -212,8 +212,8 @@ stages:
       nfiles: 2
     - path: src/credit_guard/monitoring
       hash: md5
-      md5: 6a62fd24f6a7c1d8e7cc88281ae7736e.dir
-      size: 74950
+      md5: e1ae6e78e7f398502564d2430f964be2.dir
+      size: 77111
       nfiles: 14
     params:
       params.yaml:
@@ -228,16 +228,16 @@ stages:
     outs:
     - path: reports/causal
       hash: md5
-      md5: a52a237dab454517eddaa16ff776ec67.dir
-      size: 4981
-      nfiles: 2
+      md5: 5fd1de097b056cc71c7cd5b1949a1c47.dir
+      size: 6537
+      nfiles: 4
     - path: reports/drift
       hash: md5
-      md5: 6908f98f1929a7cf763be406300fb302.dir
+      md5: 0dcb8dc39a3e092d903fd837d7be31e6.dir
       size: 5530264
       nfiles: 1
     - path: reports/monitoring
       hash: md5
-      md5: 9fad41f7cc0250f5c7bcd1a76a09bca7.dir
+      md5: c8f45669fbe5b36929acad145078f386.dir
       size: 31978840
       nfiles: 26
