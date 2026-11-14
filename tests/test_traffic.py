@@ -49,3 +49,9 @@ def test_alert_state_marks_active_and_inactive():
     by_alert = {labels["alert"]: value for _, value, labels in samples}
     assert by_alert["FeatureDriftCritical"] == 1.0
     assert by_alert["ModelAucDrop"] == 0.0
+
+
+def test_wait_for_api_gives_up_on_unreachable_url():
+    from credit_guard.simulation.traffic import wait_for_api
+
+    assert wait_for_api("http://127.0.0.1:1", timeout_seconds=1.0, interval=0.2) is False

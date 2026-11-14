@@ -21,7 +21,7 @@ def make_raw_like(n: int = 200, seed: int = 0) -> pd.DataFrame:
     ext2 = rng.uniform(0, 1, n)
     df = pd.DataFrame(
         {
-            "client_id": [f"id{i:05d}" for i in range(n)],
+            "client_id": [f"{i:016x}" for i in range(n)],
             "AMT_INCOME_TOTAL": rng.uniform(40_000, 400_000, n).round(1),
             "AMT_CREDIT": credit,
             "AMT_ANNUITY": annuity,

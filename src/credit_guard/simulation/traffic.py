@@ -87,6 +87,19 @@ def alert_state_samples(summary: dict) -> list[Sample]:
     ]
 
 
+def wait_for_api(url: str, timeout_seconds: float = 120, interval: float = 2) -> bool:
+    """Espera a API responder 200 no /health (ex.: container ainda subindo)."""
+    deadline = time.monotonic() + timeout_seconds
+    while time.monotonic() < deadline:
+        try:
+            if requests.get(f"{url}/health", timeout=2).status_code == 200:
+                return True
+        except requests.RequestException:
+            pass
+        time.sleep(interval)
+    return False
+
+
 def _post(session: requests.Session, url: str, records: list[dict], batch_id: str) -> int:
     try:
         resp = session.post(
@@ -108,6 +121,9 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     n_months = load_params()["simulation"]["n_months"]
+    if not wait_for_api(args.api_url):
+        log.error("api_not_ready", extra={"api_url": args.api_url})
+        return 1
     session = requests.Session()
     ref = json.loads(
         (REPORTS_DIR / "monitoring" / "reference_summary.json").read_text(encoding="utf-8")

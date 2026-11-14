@@ -37,8 +37,8 @@ groups:
     rules:
       - alert: ContractRejectionHigh
         expr: |
-          sum(rate(credit_contract_rejections_total[1m]))
-            / clamp_min(sum(rate(credit_rows_scored_total[1m])) + sum(rate(credit_contract_rejections_total[1m])), 1e-9)
+          sum(rate(credit_rows_rejected_total[1m]))
+            / clamp_min(sum(rate(credit_rows_scored_total[1m])) + sum(rate(credit_rows_rejected_total[1m])), 1e-9)
             > 0.01
         labels: {severity: critical}
         annotations:

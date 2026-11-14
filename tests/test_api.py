@@ -104,3 +104,29 @@ def test_health_degraded_without_model(tmp_path):
     resp = TestClient(create_app(tmp_path)).get("/health")
     assert resp.status_code == 503
     assert resp.json()["status"] == "degraded"
+
+
+# I7 - falha ao gravar o log de predicoes nao transforma um score valido em 500
+def test_prediction_log_failure_still_returns_200(models_dir, tmp_path, monkeypatch):
+    monkeypatch.setenv("PREDICTION_LOG", str(tmp_path))  # diretorio: a escrita falha
+    resp = TestClient(create_app(models_dir)).post("/predict", json={"records": _records(1)})
+    assert resp.status_code == 200
+
+
+# I8 - metrica de linhas rejeitadas conta linhas, nao violacoes
+def test_rows_rejected_counter_counts_rows(client):
+    from credit_guard.api.metrics import ROWS_REJECTED
+
+    before = ROWS_REJECTED._value.get()
+    records = _records(3)
+    records[0]["AMT_INCOME_TOTAL"] = None
+    records[0]["EXT_SOURCE_2"] = 5.0
+    assert client.post("/predict", json={"records": records}).status_code == 422
+    assert ROWS_REJECTED._value.get() - before == 3
+
+
+# M5 - a API so aceita IDs ja pseudonimizados (nunca um CPF ou ID em claro)
+def test_predict_rejects_non_pseudonymized_client_id(client):
+    records = _records(1)
+    records[0]["client_id"] = "123.456.789-09"
+    assert client.post("/predict", json={"records": records}).status_code == 422

@@ -93,7 +93,7 @@
     },
     {
       "type": "stat",
-      "title": "Rejeicao pelo contrato",
+      "title": "Linhas rejeitadas pelo contrato",
       "description": "SLO: < 1% das linhas",
       "id": 4,
       "datasource": {
@@ -106,7 +106,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(rate(credit_contract_rejections_total[1m])) / clamp_min(sum(rate(credit_rows_scored_total[1m])) + sum(rate(credit_contract_rejections_total[1m])), 1e-9)",
+          "expr": "sum(rate(credit_rows_rejected_total[1m])) / clamp_min(sum(rate(credit_rows_scored_total[1m])) + sum(rate(credit_rows_rejected_total[1m])), 1e-9)",
           "legendFormat": "",
           "refId": "A"
         }
@@ -365,7 +365,7 @@
     },
     {
       "type": "timeseries",
-      "title": "Rejeicoes do contrato por regra",
+      "title": "Violacoes do contrato por regra",
       "description": "",
       "id": 9,
       "datasource": {

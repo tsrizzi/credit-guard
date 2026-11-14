@@ -68,7 +68,9 @@ def create_app(models_dir: Path | None = None) -> FastAPI:
 
     @app.exception_handler(RequestValidationError)
     async def _shape_error(request: Request, exc: RequestValidationError):
-        record_rejections({"schema_shape": 1})
+        body = exc.body if isinstance(exc.body, dict) else {}
+        records = body.get("records")
+        record_rejections({"schema_shape": 1}, len(records) if isinstance(records, list) else 0)
         log.warning("request_shape_rejected", extra={"errors": len(exc.errors())})
         errors = json.loads(json.dumps(exc.errors(), default=str))
         return JSONResponse(
@@ -94,7 +96,7 @@ def create_app(models_dir: Path | None = None) -> FastAPI:
         df = pd.DataFrame([r.model_dump() for r in req.records])
         result = validate_batch(df)
         if not result.passed:
-            record_rejections(result.violations_by_check)
+            record_rejections(result.violations_by_check, result.n_rows)
             payload = result.to_dict()
             log.warning(
                 "contract_rejected",
@@ -118,7 +120,10 @@ def create_app(models_dir: Path | None = None) -> FastAPI:
         meta = app.state.meta
         scored = score_frame(app.state.model, meta, result.valid)
         record_predictions(scored["probability_default"], scored["decision"])
-        _append_prediction_log(scored, req.batch_id, meta["model_version"])
+        try:
+            _append_prediction_log(scored, req.batch_id, meta["model_version"])
+        except OSError as exc:  # o score ja foi calculado: falha de log nao vira 500
+            log.warning("prediction_log_failed", extra={"error": repr(exc)})
         log.info(
             "prediction_served",
             extra={

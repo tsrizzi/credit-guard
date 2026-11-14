@@ -20,7 +20,7 @@ data/**/*.parquet
 data/**/*.zip
 /models/
 archive*.zip
-/logs/
+/logs/*
 
 # MLflow local
 mlflow.db
@@ -30,3 +30,4 @@ mlruns/
 # Material interno fora do entregavel
 doc-fora-comit/
 
+!/logs/.gitkeep

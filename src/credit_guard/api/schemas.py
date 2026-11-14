@@ -14,7 +14,14 @@ Value = float | int | str | None
 CreditApplication = create_model(
     "CreditApplication",
     __config__=ConfigDict(extra="forbid"),
-    client_id=(str, Field(..., description="ID pseudonimizado do cliente")),
+    client_id=(
+        str,
+        Field(
+            ...,
+            pattern=r"^[0-9a-f]{16}$",
+            description="ID pseudonimizado (HMAC, 16 hex). Nunca CPF ou ID em claro.",
+        ),
+    ),
     **{col: (Value, Field(...)) for col in INPUT_COLUMNS},
 )
 

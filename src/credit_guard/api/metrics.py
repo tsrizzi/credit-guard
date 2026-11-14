@@ -19,7 +19,7 @@ LATENCY = Histogram(
     buckets=(0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0),
 )
 CONTRACT_REJECTIONS = Counter(
-    "credit_contract_rejections_total", "Linhas rejeitadas pelo contrato, por regra", ["check"]
+    "credit_contract_rejections_total", "Violacoes do contrato, por regra", ["check"]
 )
 PREDICTIONS = Counter("credit_predictions_total", "Decisoes de credito", ["decision"])
 SCORE = Histogram(
@@ -28,6 +28,9 @@ SCORE = Histogram(
     buckets=tuple(round(0.05 * i, 2) for i in range(1, 21)),
 )
 ROWS_SCORED = Counter("credit_rows_scored_total", "Linhas pontuadas")
+ROWS_REJECTED = Counter(
+    "credit_rows_rejected_total", "Linhas recebidas em lotes bloqueados pelo contrato"
+)
 
 
 def _dd(kind: str, name: str, value: float, tags: list[str] | None = None) -> None:
@@ -40,7 +43,9 @@ def _dd(kind: str, name: str, value: float, tags: list[str] | None = None) -> No
         pass
 
 
-def record_rejections(by_check: dict[str, int]) -> None:
+def record_rejections(by_check: dict[str, int], n_rows: int = 0) -> None:
+    ROWS_REJECTED.inc(n_rows)
+    _dd("increment", "credit.rows_rejected", n_rows)
     for check, n in by_check.items():
         CONTRACT_REJECTIONS.labels(check=check).inc(n)
         _dd("increment", "credit.contract_rejections", n, [f"check:{check}"])

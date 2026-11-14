@@ -28,13 +28,17 @@ def get_statsd():
     if not _truthy(os.environ.get("DD_ENABLED")):
         return None
     if _statsd is None:
-        from datadog.dogstatsd import DogStatsd
+        try:
+            from datadog.dogstatsd import DogStatsd
 
-        _statsd = DogStatsd(
-            host=os.environ.get("DD_AGENT_HOST", "localhost"),
-            port=int(os.environ.get("DD_DOGSTATSD_PORT", "8125")),
-            constant_tags=[SERVICE_TAG],
-        )
+            _statsd = DogStatsd(
+                host=os.environ.get("DD_AGENT_HOST", "localhost"),
+                port=int(os.environ.get("DD_DOGSTATSD_PORT", "8125")),
+                constant_tags=[SERVICE_TAG],
+            )
+        except Exception as exc:  # noqa: BLE001 - config invalida: Datadog desligado, API segue
+            log.warning("datadog_config_invalid", extra={"error": repr(exc)})
+            return None
     return _statsd
 
 
