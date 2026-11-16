@@ -9,6 +9,8 @@ import pandas as pd
 from evidently import BinaryClassification, DataDefinition, Dataset, Report
 from evidently.presets import ClassificationPreset, DataDriftPreset, DataSummaryPreset
 
+from credit_guard.config import load_params
+
 PSI_THRESHOLD = 0.2  # mesma faixa "significativo" de stats.psi_band
 _VALUE_DRIFT = re.compile(r"ValueDrift\(column=(?P<col>.+?),method=(?P<method>.+?),threshold=")
 
@@ -28,9 +30,13 @@ def build_drift_report(
     prediction: str | None = None,
 ) -> dict:
     columns = numeric + categorical
+    # "dataset drift" com o mesmo limiar do alerta DriftedShareHigh (nao o padrao de 50%)
+    drift_share = load_params()["monitoring"]["drifted_share_alert"]
     classification = None
     presets = [
-        DataDriftPreset(columns=columns, method="psi", threshold=PSI_THRESHOLD),
+        DataDriftPreset(
+            columns=columns, method="psi", threshold=PSI_THRESHOLD, drift_share=drift_share
+        ),
         DataSummaryPreset(columns=columns),
     ]
     keep = list(columns)
@@ -67,9 +73,12 @@ def build_drift_report(
             "drift": _drift_flag(match["method"], value, threshold),
         }
     drifted = [c for c, v in per_feature.items() if v["drift"]]
+    share = len(drifted) / max(len(per_feature), 1)
     return {
         "drifted_features": drifted,
-        "share_drifted": len(drifted) / max(len(per_feature), 1),
+        "share_drifted": share,
+        "dataset_drift": share >= drift_share,
+        "drift_share_threshold": drift_share,
         "n_features": len(per_feature),
         "per_feature": per_feature,
     }

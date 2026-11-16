@@ -135,3 +135,23 @@ def test_mixed_group_restored_jointly_from_reference_rows():
 def test_make_raw_like_ids_are_pseudonymized_format():
     ids = make_raw_like(n=5)["client_id"]
     assert ids.str.fullmatch(r"[0-9a-f]{16}").all()
+
+
+# Revisao visual: o titulo do Evidently dizia "Dataset Drift is NOT detected" (limiar padrao 50%)
+def test_evidently_dataset_drift_uses_project_share_threshold(tmp_path):
+    from credit_guard.config import load_params
+    from credit_guard.monitoring.evidently_reports import build_drift_report
+
+    rng = np.random.default_rng(1)
+    n = 2000
+    ref = pd.DataFrame({c: rng.normal(0, 1, n) for c in ("x", "y", "z")})
+    cur = pd.DataFrame(
+        {"x": rng.normal(1.5, 1, n), "y": rng.normal(0, 1, n), "z": rng.normal(0, 1, n)}
+    )
+    summary = build_drift_report(ref, cur, ["x", "y", "z"], [], tmp_path / "r.html")
+    assert (
+        summary["drift_share_threshold"]
+        == load_params()["monitoring"]["drifted_share_alert"]
+        == 0.25
+    )
+    assert summary["dataset_drift"] is True  # 1 de 3 colunas (33%) >= 25%
