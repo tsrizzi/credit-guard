@@ -8,15 +8,49 @@ causal da degradação.
 > Tech Challenge — Fase 4 · Pós-Tech Machine Learning Engineering (FIAP)
 > Tema: Observabilidade Contínua, Detecção de Drift, Qualidade de Dados e Governança em Produção
 
+## Resumo executivo
+
 | | |
 |---|---|
 | 🎥 **Vídeo (STAR, ≤ 5 min)** | _link a ser adicionado_ |
-| 📊 **Relatório de drift (Evidently)** | [`reports/drift/reference_vs_month_06.html`](reports/drift/reference_vs_month_06.html) |
-| 🛑 **Contrato bloqueando o lote sujo** | [`reports/validation/dirty_batch.html`](reports/validation/dirty_batch.html) |
-| 📈 **Resumo mês a mês** | [`reports/monitoring/summary.csv`](reports/monitoring/summary.csv) |
+| 🛑 **Contrato bloqueando o lote sujo** | [abrir relatório](https://raw.githack.com/tsrizzi/credit-guard/main/reports/validation/dirty_batch.html) — 500 de 500 linhas barradas |
+| 📊 **Drift — Evidently (referência × mês 6)** | [abrir relatório](https://raw.githack.com/tsrizzi/credit-guard/main/reports/drift/reference_vs_month_06.html) — *Dataset Drift detected*, 7 de 24 features (PSI) |
+| 📅 **Drift mês a mês (Evidently)** | [mês 1](https://raw.githack.com/tsrizzi/credit-guard/main/reports/monitoring/month_01/drift_report.html) · [mês 3](https://raw.githack.com/tsrizzi/credit-guard/main/reports/monitoring/month_03/drift_report.html) · [mês 6](https://raw.githack.com/tsrizzi/credit-guard/main/reports/monitoring/month_06/drift_report.html) |
+| 📈 **Resumo numérico** | [`reports/monitoring/summary.csv`](reports/monitoring/summary.csv) |
 
-> Os relatórios `.html` não são renderizados pelo GitHub: baixe o arquivo (botão *Download raw*)
-> e abra no navegador.
+| Pergunta | Resposta (dados reais do pipeline) |
+|---|---|
+| O contrato barra dado ruim? | **Sim.** 19 regras Pandera; 23 linhas reais em quarentena no bruto (ex.: renda de 117 milhões); lote sujo **bloqueado** (exit 1 / HTTP 422) |
+| O drift foi detectado? | **Sim, gradualmente.** 0 features em drift no mês 1 → 3 no mês 3 → 9 no mês 6 (PSI de `EXT_SOURCE_2` = 1,38) |
+| O modelo degradou? | **Sim, em silêncio.** AUC 0,764 → 0,672 (−9,2 p.p.) e inadimplência 8,1% → 11,6%, sem nenhuma requisição falhar |
+| Os alertas dispararam? | **Sim.** `FeatureDriftCritical` (mês 3), `ModelAucDrop` (mês 4), `DriftedShareHigh` (mês 5), cada um com runbook |
+| Há viés? | **Sim, achado real:** DI por idade 0,649 já na referência, 0,486 na crise; gênero passa (0,913). Plano de mitigação na seção 9.6 |
+| Por que degradou? | Piora de bureau explica 90% do deslocamento do score; a alta da inadimplência vem do concept drift nos autônomos (seção 10) |
+
+<details open>
+<summary><b>Evidências visuais</b> (geradas com a stack rodando localmente)</summary>
+
+**Grafana — saúde operacional, do modelo e drift, com os alertas disparando**
+
+![Dashboard Grafana](docs/images/grafana_dashboard.png)
+
+**Prometheus — 5 alertas de degradação do modelo disparando; operacionais inativos**
+
+![Alertas Prometheus](docs/images/prometheus_alerts.png)
+
+**MLflow — um run por mês de monitoramento: AUC, KS, aprovação e fairness caindo**
+
+![Runs MLflow](docs/images/mlflow_monitoring_runs.png)
+
+**Evidently — referência × mês 6 com PSI**
+
+![Evidently](docs/images/evidently_drift_month06.png)
+
+**Contrato de dados — lote sujo BLOQUEADO, com os casos de cada regra**
+
+![Contrato bloqueando](docs/images/contract_dirty_batch.png)
+
+</details>
 
 ---
 
@@ -117,9 +151,9 @@ uv run dvc pull
 # 3. (opcional) reproduzir o pipeline inteiro
 uv run dvc repro
 
-# 4. ver o contrato BLOQUEANDO o lote sujo (exit code 1)
+# 4. ver o contrato BLOQUEANDO o lote sujo (exit code 1; relatorio em demo/, fora do git)
 uv run python -m credit_guard.contracts.ingest \
-  --input data/dirty/dirty_batch.parquet --report-dir reports/validation --name dirty_batch
+  --input data/dirty/dirty_batch.parquet --report-dir demo --name dirty_batch
 
 # 5. subir a "produção": API + Prometheus + Pushgateway + Grafana
 docker compose up -d --build
@@ -142,7 +176,7 @@ uv run mlflow ui --backend-store-uri sqlite:///mlflow.db --port 5000
 e suba com `docker compose --profile datadog up -d`. As mesmas métricas passam a ser espelhadas via
 DogStatsD. Sem a chave, nada muda: o Datadog nunca é dependência.
 
-**Testes:** `uv run pytest` (100 testes, dados 100% sintéticos, sem depender do dataset) ·
+**Testes:** `uv run pytest` (103 testes, dados 100% sintéticos, sem depender do dataset) ·
 **Lint:** `uv run ruff check .` · A CI (GitHub Actions) roda lint → testes com cobertura → build da imagem.
 
 ---
@@ -293,8 +327,8 @@ Para cada mês, o estágio `monitor` compara produção × referência com **tes
 | 2 | 0,774 | 0,418 | 75,8% | 0 | FairnessDisparateImpact |
 | 3 | 0,748 | 0,366 | 72,6% | 3 | FeatureDriftCritical · ApprovalRateShift · Fairness |
 | 4 | 0,723 | 0,343 | 68,7% | 5 | + **ModelAucDrop** |
-| 5 | 0,698 | 0,294 | 66,3% | 7 | idem |
-| 6 | **0,672** | 0,263 | 61,9% | **9** | + DriftedShareHigh (todos os 5 de modelo) |
+| 5 | 0,698 | 0,294 | 66,3% | 7 | + DriftedShareHigh (todos os 5 de modelo) |
+| 6 | **0,672** | 0,263 | 61,9% | **9** | idem |
 
 PSI das variáveis mais afetadas:
 
@@ -354,7 +388,7 @@ saúde operacional → saúde do modelo → drift, com um seletor de mês.
 | `credit_pipeline_stage_duration_seconds{stage}` | gauge | duração de cada estágio | — | — |
 | `credit_pipeline_rows{stage,outcome}` | gauge | linhas aceitas / bloqueadas / geradas por estágio | — | — |
 | `credit_drift_psi{feature,month}` | gauge | PSI por feature e mês | **PSI < 0,20** nas top-5 | `FeatureDriftCritical` |
-| `credit_drift_share{month}` | gauge | fração de features em drift | < 30% | `DriftedShareHigh` |
+| `credit_drift_share{month}` | gauge | fração de features em drift | < 25% (mesmo limiar do "dataset drift" do Evidently) | `DriftedShareHigh` |
 | `credit_model_auc{month}` | gauge | AUC com rótulos atrasados | queda < 3 p.p. | `ModelAucDrop` |
 | `credit_approval_rate{month}` | gauge | taxa de aprovação | desvio < 5 p.p. | `ApprovalRateShift` |
 | `credit_fairness_di{attribute,month}` | gauge | disparate impact por gênero e faixa etária | DI ≥ 0,8 | `FairnessDisparateImpact` |
@@ -377,7 +411,7 @@ dados recentes e acompanhar `ModelAucDrop` quando os rótulos chegarem.
 
 <a id="runbook-drifted-share-high"></a>
 ### DriftedShareHigh (aviso)
-**Significa:** 30% ou mais das features estão em drift significativo — a população mudou como um todo.
+**Significa:** 25% ou mais das features estão em drift significativo — a população mudou como um todo.
 **Investigar:** comparar com eventos externos (macroeconomia, política comercial); rodar a análise causal.
 **Ação:** planejar retreino; considerar ajustar o threshold de aprovação enquanto isso.
 

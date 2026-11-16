@@ -23,7 +23,7 @@ e `reports/validation/dirty_batch.html` abertos no navegador · Pushgateway limp
 ## A — Action (1:10–3:15)
 1. **Contrato de dados (Pandera)** — 0:30
    - Mostrar `schema.py`: as regras, com destaque para o sentinela 365243 (só aposentados/desempregados).
-   - Rodar no terminal: `uv run python -m credit_guard.contracts.ingest --input data/dirty/dirty_batch.parquet --report-dir reports/validation --name dirty_batch` → **BLOQUEADO**, exit 1.
+   - Rodar no terminal: `uv run python -m credit_guard.contracts.ingest --input data/dirty/dirty_batch.parquet --report-dir demo --name dirty_batch` → **BLOQUEADO**, exit 1.
    - Abrir `dirty_batch.html`: 500/500 linhas barradas, com a renda de 117 milhões real do dataset.
 2. **Simulação do drift** — 0:30
    - `params.yaml`: inflação +5%/mês, renda −3%/mês, desemprego, piora de bureau; concept drift nos
