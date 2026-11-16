@@ -6,14 +6,14 @@ import math
 from dataclasses import asdict, dataclass
 
 RUNBOOKS = {
-    "FeatureDriftCritical": "README.md#runbook-feature-drift-critical",
-    "DriftedShareHigh": "README.md#runbook-drifted-share-high",
-    "ModelAucDrop": "README.md#runbook-model-auc-drop",
-    "ApprovalRateShift": "README.md#runbook-approval-rate-shift",
-    "ContractRejectionHigh": "README.md#runbook-contract-rejection-high",
-    "FairnessDisparateImpact": "README.md#runbook-fairness-disparate-impact",
-    "ApiLatencyHigh": "README.md#runbook-api-latency-high",
-    "PipelineStageFailed": "README.md#runbook-pipeline-stage-failed",
+    "FeatureDriftCritical": "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-feature-drift-critical",
+    "DriftedShareHigh": "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-drifted-share-high",
+    "ModelAucDrop": "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-model-auc-drop",
+    "ApprovalRateShift": "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-approval-rate-shift",
+    "ContractRejectionHigh": "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-contract-rejection-high",
+    "FairnessDisparateImpact": "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-fairness-disparate-impact",
+    "ApiLatencyHigh": "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-api-latency-high",
+    "PipelineStageFailed": "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-pipeline-stage-failed",
 }
 PSI_CRITICAL = 0.20
 DI_MIN = 0.80

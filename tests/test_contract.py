@@ -141,3 +141,11 @@ def test_dataframe_level_check_counts_one_violation_per_row(raw_like_df):
     result = validate_batch(df)
     assert result.violations_by_check["annuity_le_credit"] == 3
     assert result.n_invalid_rows == 3
+
+
+def test_ingest_cli_blank_csv_is_rejected_not_crash(tmp_path):
+    path = tmp_path / "vazio.csv"
+    path.write_text("", encoding="utf-8")
+    args = ["--input", str(path), "--report-dir", str(tmp_path), "--name", "vazio"]
+    assert ingest.main(args) == 1
+    assert "empty_batch" in (tmp_path / "vazio.json").read_text(encoding="utf-8")

@@ -9,8 +9,8 @@ stages:
       size: 166133370
     - path: src/credit_guard/contracts
       hash: md5
-      md5: 5d0221da24a3df70efadf25305249a79.dir
-      size: 43874
+      md5: 4c81c67843940058266604c905e8d0db.dir
+      size: 44222
       nfiles: 10
     - path: src/credit_guard/data
       hash: md5
@@ -52,11 +52,11 @@ stages:
       nfiles: 2
     - path: reports/validation/reference_raw.html
       hash: md5
-      md5: 14c4ef4513d5bbcda644c3154c14a36a
+      md5: 33c104770f12fb1c1bf35e260be8f1ee
       size: 2461
     - path: reports/validation/reference_raw.json
       hash: md5
-      md5: c58eb4f51b539ad64c84e2d9898d43ce
+      md5: 51482d6f8487d39b6398f38f770a2832
       size: 2721
   train:
     cmd: python -m credit_guard.model.train
@@ -168,25 +168,25 @@ stages:
       nfiles: 6
     - path: src/credit_guard/contracts
       hash: md5
-      md5: 5d0221da24a3df70efadf25305249a79.dir
-      size: 43874
+      md5: 4c81c67843940058266604c905e8d0db.dir
+      size: 44222
       nfiles: 10
     outs:
     - path: reports/validation/dirty_batch.html
       hash: md5
-      md5: 76df4d0b1131965e5788e055ab78267f
+      md5: 2011cc1b8e8a7a7b42b2635f3746a640
       size: 5561
     - path: reports/validation/dirty_batch.json
       hash: md5
-      md5: da138a3445f3cf73e66a7e1b010e1a12
+      md5: 6a01fcfe9671bdce14cac79e5e491100
       size: 7257
     - path: reports/validation/month_01.html
       hash: md5
-      md5: 5db22cc45088bcfdc5d6d9f160c994cb
+      md5: ff84a8dc9c6e5c533b4131b4f443b0f0
       size: 871
     - path: reports/validation/month_01.json
       hash: md5
-      md5: 1b14df20908b1b6f5134c839033987fe
+      md5: d25e6b1539faa0e7356bd9d1e1f879de
       size: 225
   monitor:
     cmd: python -m credit_guard.monitoring.monitor
@@ -213,8 +213,8 @@ stages:
       nfiles: 2
     - path: src/credit_guard/monitoring
       hash: md5
-      md5: 37a874a53825a76ca2d69702fcaf1aa5.dir
-      size: 81014
+      md5: 4b1ed7919e67d0cd5d2b4e378848c6be.dir
+      size: 82477
       nfiles: 14
     params:
       params.yaml:
@@ -223,7 +223,7 @@ stages:
           ks_alpha: 0.05
           auc_drop_alert: 0.03
           approval_shift_alert: 0.05
-          drifted_share_alert: 0.3
+          drifted_share_alert: 0.25
           rejection_rate_alert: 0.01
           fairness_di_drop_alert: 0.05
     outs:
@@ -234,11 +234,11 @@ stages:
       nfiles: 4
     - path: reports/drift
       hash: md5
-      md5: 27d05096a23710af4c8a75e44ac8d2da.dir
-      size: 5529694
+      md5: 80d284ce6deb6dacd61b9a51ff7e5dd5.dir
+      size: 5529691
       nfiles: 1
     - path: reports/monitoring
       hash: md5
-      md5: 169f15e0b2dfdfcc392538bad8115c4b.dir
-      size: 31974825
+      md5: 91d603f950d52f79cf1285c133b82bdd.dir
+      size: 31975998
       nfiles: 26

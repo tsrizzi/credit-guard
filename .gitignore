@@ -31,3 +31,6 @@ mlruns/
 doc-fora-comit/
 
 !/logs/.gitkeep
+
+# saida das demonstracoes locais
+/demo/

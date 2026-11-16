@@ -21,7 +21,12 @@ log = get_logger("ingest")
 
 
 def read_batch(path: Path) -> pd.DataFrame:
-    return pd.read_csv(path) if path.suffix == ".csv" else pd.read_parquet(path)
+    if path.suffix == ".csv":
+        try:
+            return pd.read_csv(path)
+        except pd.errors.EmptyDataError:  # arquivo sem nem cabecalho: lote vazio
+            return pd.DataFrame()
+    return pd.read_parquet(path)
 
 
 def main(argv: list[str] | None = None) -> int:

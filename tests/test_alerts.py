@@ -59,7 +59,9 @@ def test_other_rules():
 
 def test_every_rule_has_runbook_anchor():
     for name, link in RUNBOOKS.items():
-        assert link.startswith("README.md#runbook-"), name
+        assert link.startswith(
+            "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-"
+        ), name
 
 
 def test_fairness_alert_only_when_drift_worsens_known_bias():

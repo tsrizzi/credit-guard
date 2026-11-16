@@ -360,7 +360,7 @@
       "value": 0.6263299333824236,
       "threshold": 0.2,
       "message": "PSI >= 0,20 em feature top: EXT_SOURCE_2, NAME_INCOME_TYPE, EXT_SOURCE_3",
-      "runbook": "README.md#runbook-feature-drift-critical"
+      "runbook": "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-feature-drift-critical"
     },
     {
       "name": "ModelAucDrop",
@@ -368,7 +368,7 @@
       "value": 0.041053183820256245,
       "threshold": 0.03,
       "message": "AUC caiu de 0.764 para 0.723",
-      "runbook": "README.md#runbook-model-auc-drop"
+      "runbook": "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-model-auc-drop"
     },
     {
       "name": "ApprovalRateShift",
@@ -376,7 +376,7 @@
       "value": 0.11329566386263124,
       "threshold": 0.05,
       "message": "taxa de aprovacao deslocou da referencia",
-      "runbook": "README.md#runbook-approval-rate-shift"
+      "runbook": "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-approval-rate-shift"
     },
     {
       "name": "FairnessDisparateImpact",
@@ -384,7 +384,7 @@
       "value": 0.5562398249898249,
       "threshold": 0.8,
       "message": "disparate impact < 0,8 e piorando vs. referencia (faixa etaria)",
-      "runbook": "README.md#runbook-fairness-disparate-impact"
+      "runbook": "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-fairness-disparate-impact"
     }
   ]
 }

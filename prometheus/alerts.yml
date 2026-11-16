@@ -7,31 +7,31 @@ groups:
         labels: {severity: critical}
         annotations:
           summary: "PSI >= 0,20 em uma feature top do modelo"
-          runbook_url: "README.md#runbook-feature-drift-critical"
+          runbook_url: "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-feature-drift-critical"
       - alert: DriftedShareHigh
         expr: credit_alerts_active{alert="DriftedShareHigh"} == 1
         labels: {severity: warning}
         annotations:
-          summary: "30% ou mais das features em drift significativo"
-          runbook_url: "README.md#runbook-drifted-share-high"
+          summary: "25% ou mais das features em drift significativo"
+          runbook_url: "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-drifted-share-high"
       - alert: ModelAucDrop
         expr: credit_alerts_active{alert="ModelAucDrop"} == 1
         labels: {severity: critical}
         annotations:
           summary: "AUC caiu 3 p.p. ou mais vs. referencia (rotulos atrasados)"
-          runbook_url: "README.md#runbook-model-auc-drop"
+          runbook_url: "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-model-auc-drop"
       - alert: ApprovalRateShift
         expr: credit_alerts_active{alert="ApprovalRateShift"} == 1
         labels: {severity: warning}
         annotations:
           summary: "Taxa de aprovacao deslocou 5 p.p. ou mais vs. referencia"
-          runbook_url: "README.md#runbook-approval-rate-shift"
+          runbook_url: "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-approval-rate-shift"
       - alert: FairnessDisparateImpact
         expr: credit_alerts_active{alert="FairnessDisparateImpact"} == 1
         labels: {severity: warning}
         annotations:
           summary: "Disparate impact < 0,8 e piorando vs. referencia"
-          runbook_url: "README.md#runbook-fairness-disparate-impact"
+          runbook_url: "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-fairness-disparate-impact"
 
   - name: credit-operational
     rules:
@@ -43,17 +43,17 @@ groups:
         labels: {severity: critical}
         annotations:
           summary: "Contrato de dados rejeitando mais de 1% das linhas"
-          runbook_url: "README.md#runbook-contract-rejection-high"
+          runbook_url: "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-contract-rejection-high"
       - alert: ApiLatencyHigh
         expr: histogram_quantile(0.95, sum by (le) (rate(credit_request_latency_seconds_bucket{path="/predict"}[1m]))) > 0.5
         for: 1m
         labels: {severity: warning}
         annotations:
           summary: "Latencia p95 do /predict acima de 500 ms"
-          runbook_url: "README.md#runbook-api-latency-high"
+          runbook_url: "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-api-latency-high"
       - alert: PipelineStageFailed
         expr: credit_pipeline_stage_status == 0
         labels: {severity: critical}
         annotations:
           summary: "Estagio do pipeline falhou: {{ $labels.stage }}"
-          runbook_url: "README.md#runbook-pipeline-stage-failed"
+          runbook_url: "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-pipeline-stage-failed"

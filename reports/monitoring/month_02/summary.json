@@ -351,7 +351,7 @@
       "value": 0.5641693883942552,
       "threshold": 0.8,
       "message": "disparate impact < 0,8 e piorando vs. referencia (faixa etaria)",
-      "runbook": "README.md#runbook-fairness-disparate-impact"
+      "runbook": "https://github.com/tsrizzi/credit-guard/blob/main/README.md#runbook-fairness-disparate-impact"
     }
   ]
 }
