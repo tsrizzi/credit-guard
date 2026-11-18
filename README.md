@@ -12,7 +12,7 @@ causal da degradação.
 
 | | |
 |---|---|
-| 🎥 **Vídeo (STAR, ≤ 5 min)** | _link a ser adicionado_ |
+| 🎥 **Vídeo (STAR, ≤ 5 min)** | [assistir no YouTube](https://youtu.be/T4kFmySttzY) |
 | 🛑 **Contrato bloqueando o lote sujo** | [abrir relatório](https://raw.githack.com/tsrizzi/credit-guard/main/reports/validation/dirty_batch.html) — 500 de 500 linhas barradas |
 | 📊 **Drift — Evidently (referência × mês 6)** | [abrir relatório](https://raw.githack.com/tsrizzi/credit-guard/main/reports/drift/reference_vs_month_06.html) — *Dataset Drift detected*, 7 de 24 features (PSI) |
 | 📅 **Drift mês a mês (Evidently)** | [mês 1](https://raw.githack.com/tsrizzi/credit-guard/main/reports/monitoring/month_01/drift_report.html) · [mês 3](https://raw.githack.com/tsrizzi/credit-guard/main/reports/monitoring/month_03/drift_report.html) · [mês 6](https://raw.githack.com/tsrizzi/credit-guard/main/reports/monitoring/month_06/drift_report.html) |
